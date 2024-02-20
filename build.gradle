@@ -23,16 +23,17 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    runtimeOnly 'com.h2database:h2'
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+    runtimeOnly 'org.xerial:sqlite-jdbc:3.44.1'
+    implementation "org.hibernate.orm:hibernate-platform:6.4.4.Final"
+    implementation "org.hibernate.orm:hibernate-core"
+    implementation "jakarta.transaction:jakarta.transaction-api"
 }
 
 tasks.named('test') {
