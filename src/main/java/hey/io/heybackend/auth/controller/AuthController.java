@@ -33,9 +33,8 @@ public class AuthController {
     }
 
     @PostMapping("/auth/{uuid}/verify")
-    public boolean VerifyCode(@RequestBody VerifyCodeBody body, @PathVariable String uuid) {
+    public void VerifyCode(@RequestBody VerifyCodeBody body, @PathVariable String uuid) {
         UUID parsedUUID = UUID.fromString(uuid);
-        boolean result = authTokenService.verifyCode(parsedUUID, body.getCode());
-        return result;
+        authTokenService.verifyCode(parsedUUID, body.getCode());
     }
 }
