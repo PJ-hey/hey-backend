@@ -1,5 +1,6 @@
 package hey.io.heybackend.authToken.service;
 
+import hey.io.heybackend.authToken.dtos.VerifyCodeDTO;
 import hey.io.heybackend.authToken.entities.AuthToken;
 import hey.io.heybackend.authToken.repository.AuthTokenRepository;
 import hey.io.heybackend.common.exceptions.CustomException;
@@ -63,8 +64,8 @@ public class AuthTokenService {
         return token.orElseThrow(() -> new CustomException(ErrorCode.TOKEN_NOT_FOUND));
     }
 
-    public void verifyCode(UUID uuid, String code) {
-        AuthToken token = this.findTokenByUUID(uuid);
+    public void verifyCode(VerifyCodeDTO dto) {
+        AuthToken token = this.findTokenByUUID(dto.getUuid());
 
         if (token.getExpiredAt().isBefore(OffsetDateTime.now())) {
             throw new CustomException(ErrorCode.TOKEN_EXPIRED);
@@ -73,7 +74,7 @@ public class AuthTokenService {
         if (token.getAttemptedCount() > 5) {
             throw new CustomException(ErrorCode.TOKEN_ATTEMPTED_COUNT_EXCEED);
         }
-        if (!token.getVerificationCode().equals(code)) {
+        if (!token.getVerificationCode().equals(dto.getCode())) {
             throw new CustomException(ErrorCode.TOKEN_VERIFY_FAILED);
         }
     }

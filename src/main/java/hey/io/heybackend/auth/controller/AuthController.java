@@ -2,8 +2,10 @@ package hey.io.heybackend.auth.controller;
 
 import hey.io.heybackend.auth.dtos.SendMailBody;
 import hey.io.heybackend.auth.dtos.VerifyCodeBody;
+import hey.io.heybackend.authToken.dtos.VerifyCodeDTO;
 import hey.io.heybackend.authToken.entities.AuthToken;
 import hey.io.heybackend.authToken.service.AuthTokenService;
+import hey.io.heybackend.email.dtos.SendMessageDTO;
 import hey.io.heybackend.email.service.EmailService;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,15 +28,17 @@ public class AuthController {
     }
 
     @PostMapping("/auth/email")
-    public UUID SendMail(@RequestBody SendMailBody body) {
+    public AuthToken SendMail(@RequestBody SendMailBody body) {
         AuthToken authToken = authTokenService.createToken(body.getEmail());
-        emailService.sendMessage(authToken.getEmail(), authToken.getVerificationCode());
-        return authToken.getUuid();
+        SendMessageDTO dto = new SendMessageDTO(body.getEmail(), authToken.getVerificationCode());
+        emailService.sendMessage(dto);
+        return authToken;
     }
 
     @PostMapping("/auth/{uuid}/verify")
     public void VerifyCode(@RequestBody VerifyCodeBody body, @PathVariable String uuid) {
         UUID parsedUUID = UUID.fromString(uuid);
-        authTokenService.verifyCode(parsedUUID, body.getCode());
+        VerifyCodeDTO dto = new VerifyCodeDTO(parsedUUID, body.getCode());
+        authTokenService.verifyCode(dto);
     }
 }
