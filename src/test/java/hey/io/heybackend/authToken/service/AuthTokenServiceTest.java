@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,40 +34,85 @@ public class AuthTokenServiceTest {
     }
 
     @Test
-    public void CreateAuthToken_failed() {
+    public void createToken_save_failed() {
         Mockito.when(authTokenRepository.save(Mockito.any())).thenThrow(new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
         Assertions.assertThrows(HttpServerErrorException.class, () -> authTokenService.createToken("123@naver.com"));
     }
 
     @Test
-    public void CreateAuthToken_Success() {
+    public void createToken_save_success() {
         AuthToken mockToken = new AuthToken();
         Mockito.when(authTokenRepository.save(Mockito.any())).thenReturn(mockToken);
-        Assertions.assertEquals(mockToken,authTokenService.createToken("123@naver.com"));
-    }
-    @Test
-    public void findTokenByEmail_failed(){
-        Mockito.when(authTokenRepository.findByEmail(Mockito.any())).thenReturn(Optional.empty());
-        Assertions.assertThrows(HttpClientErrorException.class, ()-> authTokenService.findTokenByEmail("123@naver.com"));
+        Assertions.assertEquals(mockToken, authTokenService.createToken("123@naver.com"));
     }
 
     @Test
-    public void findTokenByEmail_success(){
+    public void createToken_attemptedCount_beforeToday() {
+        AuthToken mockToken = new AuthToken();
+        mockToken.setUpdatedAt(LocalDateTime.now().minusDays(1));
+        mockToken.setAttemptedCount(5);
+        authTokenService.createToken("");
+    }
+
+    @Test
+    public void createToken_attemptedCount_Today() {
+        AuthToken mockToken = new AuthToken();
+        mockToken.setUpdatedAt(LocalDateTime.now());
+        mockToken.setAttemptedCount(5);
+        Mockito.when(authTokenRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(mockToken));
+        authTokenService.createToken("");
+    }
+
+    @Test
+    public void findTokenByEmail_failed() {
+        Mockito.when(authTokenRepository.findByEmail(Mockito.any())).thenReturn(Optional.empty());
+        Assertions.assertThrows(HttpClientErrorException.class, () -> authTokenService.findTokenByEmail("123@naver.com"));
+    }
+
+    @Test
+    public void findTokenByEmail_success() {
         AuthToken token = new AuthToken();
         Mockito.when(authTokenRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(token));
-        Assertions.assertEquals(token,authTokenService.findTokenByEmail("123@naver.com"));
+        Assertions.assertEquals(token, authTokenService.findTokenByEmail("123@naver.com"));
     }
 
     @Test
-    public void findTokenByUUID_failed(){
+    public void findTokenByUUID_failed() {
         Mockito.when(authTokenRepository.findByUuid(Mockito.any())).thenReturn(Optional.empty());
-        Assertions.assertThrows(HttpClientErrorException.class, ()-> authTokenService.findTokenByUUID(UUID.randomUUID()));
+        Assertions.assertThrows(HttpClientErrorException.class, () -> authTokenService.findTokenByUUID(UUID.randomUUID()));
     }
 
     @Test
-    public void findTokenByUUID_success(){
+    public void findTokenByUUID_success() {
         AuthToken token = new AuthToken();
         Mockito.when(authTokenRepository.findByUuid(Mockito.any())).thenReturn(Optional.of(token));
-        Assertions.assertEquals(token,authTokenService.findTokenByUUID(UUID.randomUUID()));
+        Assertions.assertEquals(token, authTokenService.findTokenByUUID(UUID.randomUUID()));
+    }
+
+    @Test
+    public void verifyCode_Expired_failed() {
+        AuthToken token = new AuthToken();
+        token.setExpiredAt(OffsetDateTime.now().minusMinutes(100));
+        Mockito.when(authTokenRepository.findByUuid(Mockito.any())).thenReturn(Optional.of(token));
+        Assertions.assertThrows(HttpClientErrorException.class, () -> authTokenService.verifyCode(UUID.randomUUID(), ""));
+    }
+
+    @Test
+    public void verifyCode_AttemptedCount_failed() {
+        AuthToken token = new AuthToken();
+        token.setAttemptedCount(6);
+        token.setExpiredAt(OffsetDateTime.now().plusMinutes(10));
+        Mockito.when(authTokenRepository.findByUuid(Mockito.any())).thenReturn(Optional.of(token));
+        Assertions.assertThrows(HttpClientErrorException.class, () -> authTokenService.verifyCode(UUID.randomUUID(), ""));
+    }
+
+    @Test
+    public void verifyCode_success() {
+        AuthToken token = new AuthToken();
+        token.setAttemptedCount(0);
+        token.setExpiredAt(OffsetDateTime.now().plusMinutes(10));
+        token.setVerificationCode("");
+        Mockito.when(authTokenRepository.findByUuid(Mockito.any())).thenReturn(Optional.of(token));
+        Assertions.assertTrue(authTokenService.verifyCode(UUID.randomUUID(), ""));
     }
 }

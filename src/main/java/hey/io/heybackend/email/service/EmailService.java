@@ -13,12 +13,12 @@ public class EmailService {
         this.emailSender = emailSender;
     }
 
-    public void sendMessage(String to) {
+    public void sendMessage(String to, String code) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("test@naver.com");
         message.setTo(to);
-        message.setSubject("Hello this is test");
-        message.setText("Hi");
+        message.setSubject("Hey Service Verification code");
+        message.setText(String.format("Your verification code is : %s", code));
         emailSender.send(message);
     }
 }

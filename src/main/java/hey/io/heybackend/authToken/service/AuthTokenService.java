@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.Random;
@@ -23,16 +24,27 @@ public class AuthTokenService {
     }
 
     public AuthToken createToken(String email) {
-        AuthToken newAuthToken = new AuthToken();
+        AuthToken newAuthToken;
+        int attemptedCount = 0;
+        try {
+            newAuthToken = this.findTokenByEmail(email);
+            if (newAuthToken.getUpdatedAt().toLocalDate().isBefore(LocalDate.now())) {
+                newAuthToken.setAttemptedCount(0);
+            }
+            attemptedCount = newAuthToken.getAttemptedCount();
+        } catch (HttpClientErrorException e) {
+            newAuthToken = new AuthToken();
+        }
 
         OffsetDateTime expireDate = OffsetDateTime.now().plusMinutes(10);
         newAuthToken.setEmail(email);
         newAuthToken.setUuid(this.generateRandomUUID());
         newAuthToken.setExpiredAt(expireDate);
         newAuthToken.setVerificationCode(this.generateRandomCode());
+        newAuthToken.setAttemptedCount(attemptedCount + 1);
+        System.out.println(newAuthToken.getAttemptedCount());
         try {
-            AuthToken generatedToken = authTokenRepository.save(newAuthToken);
-            return generatedToken;
+            return authTokenRepository.save(newAuthToken);
         } catch (Exception e) {
             throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -40,23 +52,34 @@ public class AuthTokenService {
     }
 
     public AuthToken findTokenByEmail(String email) {
-            Optional<AuthToken> token = authTokenRepository.findByEmail(email);
-            return token.orElseThrow(()->new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        Optional<AuthToken> token = authTokenRepository.findByEmail(email);
+        return token.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
     }
 
     public AuthToken findTokenByUUID(UUID uuid) {
         Optional<AuthToken> token = authTokenRepository.findByUuid(uuid);
-        return token.orElseThrow(()->new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        return token.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+    }
+
+    public boolean verifyCode(UUID uuid, String code) {
+        AuthToken token = this.findTokenByUUID(uuid);
+
+        if (token.getExpiredAt().isBefore(OffsetDateTime.now())) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+        }
+
+        if (token.getAttemptedCount() > 5) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+        }
+
+        return token.getVerificationCode().equals(code);
     }
 
     public UUID generateRandomUUID() {
-        UUID uuid = UUID.randomUUID();
-        return uuid;
+        return UUID.randomUUID();
     }
 
     public String generateRandomCode() {
-        String VerificationCode = String.format("%04d", rand.nextInt(1001));
-
-        return VerificationCode;
+        return String.format("%04d", rand.nextInt(1001));
     }
 }
