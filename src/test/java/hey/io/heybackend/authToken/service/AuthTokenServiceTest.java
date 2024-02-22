@@ -1,5 +1,6 @@
 package hey.io.heybackend.authToken.service;
 
+import hey.io.heybackend.authToken.entities.AuthToken;
 import hey.io.heybackend.authToken.repository.AuthTokenRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +11,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
+
+import java.time.OffsetDateTime;
+import java.util.Optional;
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
@@ -34,7 +40,33 @@ public class AuthTokenServiceTest {
 
     @Test
     public void CreateAuthToken_Success() {
+        AuthToken mockToken = new AuthToken();
+        Mockito.when(authTokenRepository.save(Mockito.any())).thenReturn(mockToken);
+        Assertions.assertEquals(mockToken,authTokenService.createToken("123@naver.com"));
+    }
+    @Test
+    public void findTokenByEmail_failed(){
+        Mockito.when(authTokenRepository.findByEmail(Mockito.any())).thenReturn(Optional.empty());
+        Assertions.assertThrows(HttpClientErrorException.class, ()-> authTokenService.findTokenByEmail("123@naver.com"));
+    }
 
-        Mockito.when(authTokenRepository.save(Mockito.any())).thenReturn();
+    @Test
+    public void findTokenByEmail_success(){
+        AuthToken token = new AuthToken();
+        Mockito.when(authTokenRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(token));
+        Assertions.assertEquals(token,authTokenService.findTokenByEmail("123@naver.com"));
+    }
+
+    @Test
+    public void findTokenByUUID_failed(){
+        Mockito.when(authTokenRepository.findByUuid(Mockito.any())).thenReturn(Optional.empty());
+        Assertions.assertThrows(HttpClientErrorException.class, ()-> authTokenService.findTokenByUUID(UUID.randomUUID()));
+    }
+
+    @Test
+    public void findTokenByUUID_success(){
+        AuthToken token = new AuthToken();
+        Mockito.when(authTokenRepository.findByUuid(Mockito.any())).thenReturn(Optional.of(token));
+        Assertions.assertEquals(token,authTokenService.findTokenByUUID(UUID.randomUUID()));
     }
 }

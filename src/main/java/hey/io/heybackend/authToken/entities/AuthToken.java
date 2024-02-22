@@ -15,6 +15,9 @@ import java.util.UUID;
 public class AuthToken extends CommonModel {
 
     @Column
+    private String email;
+
+    @Column
     private UUID uuid;
 
     @Column
