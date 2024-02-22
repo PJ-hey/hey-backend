@@ -28,13 +28,22 @@ public class AuthTokenService {
         int attemptedCount = 0;
         try {
             newAuthToken = this.findTokenByEmail(email);
+            if (newAuthToken.getAttemptedCount() > 5) {
+                throw new CustomException(ErrorCode.TOKEN_ATTEMPTED_COUNT_EXCEED);
+            }
             if (newAuthToken.getUpdatedAt().toLocalDate().isBefore(LocalDate.now())) {
                 newAuthToken.setAttemptedCount(0);
             }
+
             attemptedCount = newAuthToken.getAttemptedCount();
         } catch (CustomException e) {
-            newAuthToken = new AuthToken();
+            if (!e.getErrorCode().equals(ErrorCode.TOKEN_ATTEMPTED_COUNT_EXCEED)) {
+                newAuthToken = new AuthToken();
+            } else {
+                throw e;
+            }
         }
+
 
         OffsetDateTime expireDate = OffsetDateTime.now().plusMinutes(10);
         newAuthToken.setEmail(email);
@@ -42,7 +51,6 @@ public class AuthTokenService {
         newAuthToken.setExpiredAt(expireDate);
         newAuthToken.setVerificationCode(this.generateRandomCode());
         newAuthToken.setAttemptedCount(attemptedCount + 1);
-        System.out.println(newAuthToken.getAttemptedCount());
         try {
             return authTokenRepository.save(newAuthToken);
         } catch (Exception e) {
