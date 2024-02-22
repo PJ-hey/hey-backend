@@ -64,7 +64,7 @@ public class AuthTokenService {
         return token.orElseThrow(() -> new CustomException(ErrorCode.TOKEN_NOT_FOUND));
     }
 
-    public void verifyCode(VerifyCodeDTO dto) {
+    public AuthToken verifyCode(VerifyCodeDTO dto) {
         AuthToken token = this.findTokenByUUID(dto.getUuid());
 
         if (token.getExpiredAt().isBefore(OffsetDateTime.now())) {
@@ -77,6 +77,8 @@ public class AuthTokenService {
         if (!token.getVerificationCode().equals(dto.getCode())) {
             throw new CustomException(ErrorCode.TOKEN_VERIFY_FAILED);
         }
+
+        return token;
     }
 
     public UUID generateRandomUUID() {
