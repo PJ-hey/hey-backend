@@ -34,6 +34,7 @@ dependencies {
     implementation "org.hibernate.orm:hibernate-core"
     implementation "jakarta.transaction:jakarta.transaction-api"
     implementation "org.mockito:mockito-core:5.10.0"
+    implementation "com.icegreen:greenmail-junit5:1.6.11"
 }
 
 tasks.named('test') {
