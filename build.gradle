@@ -30,10 +30,10 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    runtimeOnly 'org.xerial:sqlite-jdbc:3.44.1'
     implementation "org.hibernate.orm:hibernate-platform:6.4.4.Final"
     implementation "org.hibernate.orm:hibernate-core"
     implementation "jakarta.transaction:jakarta.transaction-api"
+    implementation "org.mockito:mockito-core:5.10.0"
 }
 
 tasks.named('test') {
