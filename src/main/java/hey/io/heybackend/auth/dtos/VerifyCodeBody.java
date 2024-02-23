@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-public class sendMailBody {
+public class VerifyCodeBody {
     @Setter
-    private String email;
-
+    private String code;
 }
