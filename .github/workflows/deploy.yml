@@ -16,4 +16,9 @@ jobs:
           key: ${{ secrets.REMOTE_SSH_KEY }}
           port: ${{ secrets.REMOTE_SSH_PORT }}
           script: |
-            whoami
+            cd /home/ubuntu/hey-backend&&
+             git checkout dev &&
+             git pull origin dev --force &&
+             docker rm -f $(docker ps -aq) &&
+             docker rmi $(docker images -q) &&
+             docker-compose up -d
