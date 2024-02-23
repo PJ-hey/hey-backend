@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class UpdateUserResponse {
 
     private Long id;
-
+    private String nickName;
 }

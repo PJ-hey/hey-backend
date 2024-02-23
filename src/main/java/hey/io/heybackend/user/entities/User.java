@@ -1,16 +1,17 @@
 package hey.io.heybackend.user.entities;
 
-import hey.io.heybackend.common.entities.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "\"user\"")
-public class User extends BaseTimeEntity {
+public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +30,9 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime modifiedAt;
 
     public void updateUser(String nickName, String password) {
         this.nickName = nickName;

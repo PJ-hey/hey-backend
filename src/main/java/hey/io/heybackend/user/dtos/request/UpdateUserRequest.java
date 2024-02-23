@@ -10,7 +10,5 @@ import lombok.NoArgsConstructor;
 public class UpdateUserRequest {
 
     private String nickName;
-
-    private String currentPassword;
-    private String newPassword;
+    private String password;
 }

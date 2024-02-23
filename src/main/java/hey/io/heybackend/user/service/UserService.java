@@ -32,11 +32,10 @@ public class UserService {
                 .orElseThrow(() -> new NullPointerException("USER_NOT_FOUND"));
 
         validateNickName(request.getNickName());
-        validatePassword(userId, request.getCurrentPassword());
 
-        user.updateUser(request.getNickName(), encoder.encode(request.getNewPassword()));
+        user.updateUser(request.getNickName(), encoder.encode(request.getPassword()));
 
-        return new UpdateUserResponse(userId);
+        return new UpdateUserResponse(userId, request.getNickName());
     }
 
     private void validateNickName(String nickName) {
@@ -45,13 +44,9 @@ public class UserService {
         }
     }
 
-    private void validatePassword(Long userId, String password) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NullPointerException("USER_NOT_FOUND"));
-
-        if(!encoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException();
-        }
+    @Transactional
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NullPointerException("USER_NOT_FOUND"));
+        userRepository.delete(user);
     }
-
 }
