@@ -1,11 +1,11 @@
 package hey.io.heybackend.authToken.service;
 
+import hey.io.heybackend.authToken.dtos.VerifyCodeDTO;
 import hey.io.heybackend.authToken.entities.AuthToken;
 import hey.io.heybackend.authToken.repository.AuthTokenRepository;
-import org.springframework.http.HttpStatus;
+import hey.io.heybackend.common.exceptions.CustomException;
+import hey.io.heybackend.common.exceptions.ErrorCode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -32,7 +32,7 @@ public class AuthTokenService {
                 newAuthToken.setAttemptedCount(0);
             }
             attemptedCount = newAuthToken.getAttemptedCount();
-        } catch (HttpClientErrorException e) {
+        } catch (CustomException e) {
             newAuthToken = new AuthToken();
         }
 
@@ -46,33 +46,39 @@ public class AuthTokenService {
         try {
             return authTokenRepository.save(newAuthToken);
         } catch (Exception e) {
-            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException(ErrorCode.TOKEN_SAVED_FAILED);
+            // throw Internal Server Error
+            //throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
 
     public AuthToken findTokenByEmail(String email) {
         Optional<AuthToken> token = authTokenRepository.findByEmail(email);
-        return token.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        // throw TokenNotFound error
+        return token.orElseThrow(() -> new CustomException(ErrorCode.TOKEN_NOT_FOUND));
     }
 
     public AuthToken findTokenByUUID(UUID uuid) {
         Optional<AuthToken> token = authTokenRepository.findByUuid(uuid);
-        return token.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        return token.orElseThrow(() -> new CustomException(ErrorCode.TOKEN_NOT_FOUND));
     }
 
-    public boolean verifyCode(UUID uuid, String code) {
-        AuthToken token = this.findTokenByUUID(uuid);
+    public AuthToken verifyCode(VerifyCodeDTO dto) {
+        AuthToken token = this.findTokenByUUID(dto.getUuid());
 
         if (token.getExpiredAt().isBefore(OffsetDateTime.now())) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+            throw new CustomException(ErrorCode.TOKEN_EXPIRED);
         }
 
         if (token.getAttemptedCount() > 5) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+            throw new CustomException(ErrorCode.TOKEN_ATTEMPTED_COUNT_EXCEED);
+        }
+        if (!token.getVerificationCode().equals(dto.getCode())) {
+            throw new CustomException(ErrorCode.TOKEN_VERIFY_FAILED);
         }
 
-        return token.getVerificationCode().equals(code);
+        return token;
     }
 
     public UUID generateRandomUUID() {
