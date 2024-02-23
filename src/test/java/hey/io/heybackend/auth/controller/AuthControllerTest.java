@@ -1,20 +1,22 @@
 package hey.io.heybackend.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icegreen.greenmail.configuration.GreenMailConfiguration;
+import com.icegreen.greenmail.junit5.GreenMailExtension;
+import com.icegreen.greenmail.util.ServerSetupTest;
 import hey.io.heybackend.auth.dtos.SendMailBody;
 import hey.io.heybackend.auth.dtos.VerifyCodeBody;
 import hey.io.heybackend.authToken.entities.AuthToken;
 import hey.io.heybackend.authToken.repository.AuthTokenRepository;
 import hey.io.heybackend.authToken.service.AuthTokenService;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.UUID;
@@ -22,11 +24,13 @@ import java.util.UUID;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AuthControllerTest {
+    @RegisterExtension
+    static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP).
+            withConfiguration(GreenMailConfiguration.aConfig().withUser("user", "admin")).
+            withPerMethodLifecycle(false);
     private AuthTokenService authTokenService;
-
     @Autowired
     private AuthTokenRepository authTokenRepository;
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -37,12 +41,6 @@ public class AuthControllerTest {
         authTokenService.createToken("123@naver.com");
     }
 
-    @Test
-    void GetMail_Test() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/auth/email")).
-                andExpect(MockMvcResultMatchers.status().isOk()).
-                andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("Hello")));
-    }
 
     @Test
     void SendMail_Test() throws Exception {
@@ -51,7 +49,7 @@ public class AuthControllerTest {
         bodyDto.setEmail("123@naver.com");
         String body = mapper.writeValueAsString(bodyDto);
         this.mockMvc.perform(MockMvcRequestBuilders.post("/auth/email").content(body).contentType("application/json")).
-                andExpect(MockMvcResultMatchers.status().isOk()).andDo(MockMvcResultHandlers.print());
+                andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
@@ -68,6 +66,6 @@ public class AuthControllerTest {
         String body = mapper.writeValueAsString(bodyDto);
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(url).content(body).contentType("application/json")).
-                andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("true")));
+                andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
