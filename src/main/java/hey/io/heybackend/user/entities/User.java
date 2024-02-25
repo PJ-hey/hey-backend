@@ -2,6 +2,7 @@ package hey.io.heybackend.user.entities;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,6 +34,7 @@ public class User{
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
+
 
     public void updateUser(String nickName, String password) {
         this.nickName = nickName;

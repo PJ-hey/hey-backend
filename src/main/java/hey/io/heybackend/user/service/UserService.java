@@ -1,7 +1,7 @@
 package hey.io.heybackend.user.service;
 
 import hey.io.heybackend.user.dtos.request.UpdateUserRequest;
-import hey.io.heybackend.user.dtos.response.MyInfoResponse;
+import hey.io.heybackend.user.dtos.response.UserResponse;
 import hey.io.heybackend.user.dtos.response.UpdateUserResponse;
 import hey.io.heybackend.user.entities.User;
 import hey.io.heybackend.user.repository.UserRepository;
@@ -20,16 +20,16 @@ public class UserService {
 
     // TODO : 에러 정의
 
-    public MyInfoResponse getMyInfo(Long userId){
+    public UserResponse getUser(Long userId){
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NullPointerException("USER_NOT_FOUND"));
-        return MyInfoResponse.of(user);
+                .orElseThrow(IllegalArgumentException::new);
+        return UserResponse.of(user);
     }
 
     @Transactional
-    public UpdateUserResponse updateUserInfo(Long userId, UpdateUserRequest request) {
+    public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NullPointerException("USER_NOT_FOUND"));
+                .orElseThrow(IllegalArgumentException::new);
 
         validateNickName(request.getNickName());
 
@@ -46,7 +46,9 @@ public class UserService {
 
     @Transactional
     public void deleteUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NullPointerException("USER_NOT_FOUND"));
+        User user = userRepository.findById(userId).
+                orElseThrow(IllegalArgumentException::new);
+
         userRepository.delete(user);
     }
 }

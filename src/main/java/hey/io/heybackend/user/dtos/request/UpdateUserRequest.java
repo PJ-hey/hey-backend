@@ -11,4 +11,6 @@ public class UpdateUserRequest {
 
     private String nickName;
     private String password;
+
+
 }
