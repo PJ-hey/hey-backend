@@ -1,5 +1,6 @@
 package hey.io.heybackend.user.controller;
 
+import hey.io.heybackend.common.response.ResponseDTO;
 import hey.io.heybackend.user.dtos.request.UpdateUserRequest;
 import hey.io.heybackend.user.dtos.response.UserResponse;
 import hey.io.heybackend.user.dtos.response.UpdateUserResponse;
@@ -9,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,19 +23,28 @@ public class UserController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable("id") Long userId) {
+    public ResponseEntity<ResponseDTO<UserResponse>> getUser(@PathVariable("id") Long userId) {
 
-        return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
+        UserResponse userResponse = userService.getUser(userId);
+        ResponseDTO<UserResponse> responseDTO = new ResponseDTO<>(true, Optional.of(userResponse));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateUserResponse> updateUser(@PathVariable("id") Long userId, @RequestBody UpdateUserRequest request) {
-        return new ResponseEntity<>(userService.updateUser(userId, request), HttpStatus.OK);
+    public ResponseEntity<ResponseDTO<UpdateUserResponse>> updateUser(@PathVariable("id") Long userId, @RequestBody UpdateUserRequest request) {
+
+        UpdateUserResponse updateUserResponse = userService.updateUser(userId, request);
+        ResponseDTO<UpdateUserResponse> responseDTO = new ResponseDTO<>(true, Optional.of(updateUserResponse));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long userId) {
+    public ResponseEntity<ResponseDTO<Void>> deleteUser(@PathVariable("id") Long userId) {
+
         userService.deleteUser(userId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        ResponseDTO<Void> responseDTO = new ResponseDTO<>(true, null);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 }

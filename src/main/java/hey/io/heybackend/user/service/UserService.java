@@ -1,5 +1,7 @@
 package hey.io.heybackend.user.service;
 
+import hey.io.heybackend.common.exceptions.CustomException;
+import hey.io.heybackend.common.exceptions.ErrorCode;
 import hey.io.heybackend.user.dtos.request.UpdateUserRequest;
 import hey.io.heybackend.user.dtos.response.UserResponse;
 import hey.io.heybackend.user.dtos.response.UpdateUserResponse;
@@ -22,14 +24,14 @@ public class UserService {
 
     public UserResponse getUser(Long userId){
         User user = userRepository.findById(userId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return UserResponse.of(user);
     }
 
     @Transactional
     public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         validateNickName(request.getNickName());
 
@@ -40,14 +42,14 @@ public class UserService {
 
     private void validateNickName(String nickName) {
         if(userRepository.existsUserByNickName(nickName)) {
-            throw new IllegalArgumentException();
+            throw new CustomException(ErrorCode.DUPLICATED_USER_NICKNAME);
         }
     }
 
     @Transactional
     public void deleteUser(Long userId) {
-        User user = userRepository.findById(userId).
-                orElseThrow(IllegalArgumentException::new);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         userRepository.delete(user);
     }

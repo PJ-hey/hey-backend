@@ -41,9 +41,9 @@ public class SecurityConfig {
                 )// 2번
                 .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
-                                .requestMatchers(PathRequest.toH2Console()).permitAll()
+//                                .requestMatchers(PathRequest.toH2Console()).permitAll()
 //                                .requestMatchers("/").permitAll()
-//                                .requestMatchers("/posts/**", "/api/v1/posts/**").hasRole(UserRole.USER.name())
+//                                .requestMatchers("/", "/").hasRole(UserRole.USER.name())
                                 .anyRequest().permitAll()
                 )// 3번
                 .exceptionHandling((exceptionConfig) ->
