@@ -29,17 +29,12 @@ dependencies {
     implementation "org.hibernate.orm:hibernate-platform:6.4.4.Final"
     implementation "org.hibernate.orm:hibernate-core"
     implementation "jakarta.transaction:jakarta.transaction-api"
-
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
-
     compileOnly 'org.projectlombok:lombok'
-
     annotationProcessor 'org.projectlombok:lombok'
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-
 }
 
 tasks.named('test') {
