@@ -1,0 +1,38 @@
+package hey.io.heybackend.user.controller;
+
+import hey.io.heybackend.user.dtos.request.UpdateUserRequest;
+import hey.io.heybackend.user.dtos.response.UserResponse;
+import hey.io.heybackend.user.dtos.response.UpdateUserResponse;
+import hey.io.heybackend.user.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/user")
+public class UserController {
+
+    private final UserService userService;
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getUser(@PathVariable("id") Long userId) {
+
+        return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UpdateUserResponse> updateUser(@PathVariable("id") Long userId, @RequestBody UpdateUserRequest request) {
+        return new ResponseEntity<>(userService.updateUser(userId, request), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long userId) {
+        userService.deleteUser(userId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+}

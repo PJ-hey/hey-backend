@@ -1,0 +1,14 @@
+package hey.io.heybackend.user.dtos.response;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class UpdateUserResponse {
+
+    private Long id;
+    private String nickName;
+}
