@@ -8,13 +8,17 @@ import hey.io.heybackend.authToken.service.AuthTokenService;
 import hey.io.heybackend.common.response.ResponseDTO;
 import hey.io.heybackend.email.dtos.SendMessageDTO;
 import hey.io.heybackend.email.service.EmailService;
+import hey.io.heybackend.oauth.service.OAuthService;
 import hey.io.heybackend.user.dtos.request.CreateUserRequest;
 import hey.io.heybackend.user.entities.User;
 import hey.io.heybackend.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,12 +27,14 @@ public class AuthController {
 
     private final EmailService emailService;
     private final UserService userService;
+    private final OAuthService oAuthService;
     private final AuthTokenService authTokenService;
 
-    public AuthController(EmailService emailService, AuthTokenService authTokenService, UserService userService) {
+    public AuthController(EmailService emailService, AuthTokenService authTokenService, UserService userService, OAuthService oAuthService) {
         this.emailService = emailService;
         this.userService = userService;
         this.authTokenService = authTokenService;
+        this.oAuthService = oAuthService;
     }
 
     @GetMapping("/auth/email")
@@ -50,6 +56,12 @@ public class AuthController {
         User savedUser = userService.createUser(body);
         ResponseDTO<User> responseDTO = new ResponseDTO<>(true, Optional.of(savedUser));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/auth/oauth/loginInfo")
+    public Map<String, Object> OAuthSignup(Authentication authentication) {
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        return oAuth2User.getAttributes();
     }
 
     @PostMapping("/auth/{uuid}/verify")

@@ -17,14 +17,22 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class User extends CommonModel {
 
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @Column(name = "password")
     private String password;
 
+    @Column(name = "username", nullable = false)
     private String userName;
 
+    @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
+    @Column(name = "provider")
+    private String provider;
+
+    @Column(name = "nick_name", nullable = false, unique = true)
     private String nickName;
 
     @Enumerated(EnumType.STRING)
@@ -38,9 +46,9 @@ public class User extends CommonModel {
         this.nickName = request.getNickName();
     }
 
-    public void updateUser(String nickName, String password) {
-        this.nickName = nickName;
-        this.password = password;
+    public void updateUser() {
+
     }
+
 
 }
