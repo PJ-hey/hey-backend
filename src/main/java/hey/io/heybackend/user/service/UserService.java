@@ -2,9 +2,10 @@ package hey.io.heybackend.user.service;
 
 import hey.io.heybackend.common.exceptions.CustomException;
 import hey.io.heybackend.common.exceptions.ErrorCode;
+import hey.io.heybackend.user.dtos.request.CreateUserRequest;
 import hey.io.heybackend.user.dtos.request.UpdateUserRequest;
-import hey.io.heybackend.user.dtos.response.UserResponse;
 import hey.io.heybackend.user.dtos.response.UpdateUserResponse;
+import hey.io.heybackend.user.dtos.response.UserResponse;
 import hey.io.heybackend.user.entities.User;
 import hey.io.heybackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,21 @@ public class UserService {
 
     // TODO : 에러 정의
 
-    public UserResponse getUser(Long userId){
+    @Transactional
+    public User createUser(CreateUserRequest request) {
+        try {
+            String hashedPassword = encoder.encode(request.getPassword());
+            User user = new User(request);
+            User savedUser = userRepository.save(user);
+
+            return savedUser;
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.USER_SAVED_FAILED);
+        }
+
+    }
+
+    public UserResponse getUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return UserResponse.of(user);
@@ -41,7 +56,7 @@ public class UserService {
     }
 
     private void validateNickName(String nickName) {
-        if(userRepository.existsUserByNickName(nickName)) {
+        if (userRepository.existsUserByNickName(nickName)) {
             throw new CustomException(ErrorCode.DUPLICATED_USER_NICKNAME);
         }
     }

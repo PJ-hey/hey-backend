@@ -94,6 +94,6 @@ public class AuthTokenService {
     }
 
     public String generateRandomCode() {
-        return String.format("%04d", rand.nextInt(1001));
+        return String.format("%06d", rand.nextInt(100001));
     }
 }

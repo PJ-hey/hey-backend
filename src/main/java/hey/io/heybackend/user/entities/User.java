@@ -1,17 +1,19 @@
 package hey.io.heybackend.user.entities;
 
 import hey.io.heybackend.common.entities.CommonModel;
-import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
+import hey.io.heybackend.user.dtos.request.CreateUserRequest;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import lombok.Setter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "\"user\"")
 public class User extends CommonModel {
 
@@ -27,6 +29,15 @@ public class User extends CommonModel {
 
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
+
+    public User(CreateUserRequest request) {
+        String hashedPassword = new BCryptPasswordEncoder().encode(request.getPassword());
+        this.email = request.getEmail();
+        this.password = hashedPassword;
+        this.userName = request.getUserName();
+        this.phoneNumber = request.getPhoneNumber();
+        this.nickName = request.getNickName();
+    }
 
     public void updateUser(String nickName, String password) {
         this.nickName = nickName;
