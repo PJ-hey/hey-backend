@@ -1,5 +1,6 @@
 package hey.io.heybackend.user.entities;
 
+import hey.io.heybackend.common.entities.CommonModel;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,11 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "\"user\"")
-public class User{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends CommonModel {
 
     private String email;
 
@@ -30,11 +27,6 @@ public class User{
 
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime modifiedAt;
-
 
     public void updateUser(String nickName, String password) {
         this.nickName = nickName;
