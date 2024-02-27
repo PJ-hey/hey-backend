@@ -17,4 +17,9 @@ public class CreateUserRequest {
     private String phoneNumber;
 
     private String nickName;
+
+    private String provider;
+
+    private boolean isCompleted;
+
 }

@@ -2,6 +2,7 @@ package hey.io.heybackend.user.service;
 
 import hey.io.heybackend.common.exceptions.CustomException;
 import hey.io.heybackend.user.dtos.request.CreateUserRequest;
+import hey.io.heybackend.user.dtos.request.UpdateUserRequest;
 import hey.io.heybackend.user.entities.User;
 import hey.io.heybackend.user.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -27,6 +28,8 @@ public class UserServiceTest {
     @BeforeEach
     public void setUp() {
         userService = new UserService(userRepository, new BCryptPasswordEncoder());
+        CreateUserRequest request = new CreateUserRequest("123@naver.com", "12345678", "test", "11111111111", "test");
+        userService.createUser(request);
     }
 
     @Test
@@ -52,5 +55,13 @@ public class UserServiceTest {
         CreateUserRequest request = new CreateUserRequest("", "12345678", "test", "1111111111", "test");
 
         Assertions.assertThrows(CustomException.class, () -> userService.createUser(request));
+    }
+
+    @Test
+    public void updateUser_success() {
+        UpdateUserRequest request = new UpdateUserRequest();
+        request.setUserName("Updated Test");
+        Long id = (long) 1;
+        userService.updateUser(id, request);
     }
 }

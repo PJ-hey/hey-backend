@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -35,6 +36,10 @@ public class User extends CommonModel {
     @Column(name = "nick_name", nullable = false, unique = true)
     private String nickName;
 
+    @Column(name = "is_completed")
+    @ColumnDefault("false")
+    private boolean isCompleted;
+
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
 
@@ -44,11 +49,8 @@ public class User extends CommonModel {
         this.userName = request.getUserName();
         this.phoneNumber = request.getPhoneNumber();
         this.nickName = request.getNickName();
+        this.provider = request.getProvider();
+        this.isCompleted = request.isCompleted();
     }
-
-    public void updateUser() {
-
-    }
-
 
 }

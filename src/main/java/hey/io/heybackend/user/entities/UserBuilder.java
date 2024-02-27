@@ -16,6 +16,8 @@ public class UserBuilder {
     private String phoneNumber;
 
     private String nickName;
+    private String provider;
+    private boolean isCompleted;
 
     public UserBuilder email(String email) {
         if (!EmailValidator.getInstance().isValid(email)) {
@@ -49,6 +51,16 @@ public class UserBuilder {
         return this;
     }
 
+    public UserBuilder provider(String provider) {
+        this.provider = provider;
+        return this;
+    }
+
+    public UserBuilder isCompleted(boolean isCompleted) {
+        this.isCompleted = isCompleted;
+        return this;
+    }
+
     public UserBuilder nickName(String nickName) {
         if (isValidLength(1, 10, nickName.length())) {
             throw new CustomException(ErrorCode.USER_NICKNAME_NOT_VALID);
@@ -58,7 +70,7 @@ public class UserBuilder {
     }
 
     public User build() {
-        CreateUserRequest request = new CreateUserRequest(email, password, userName, phoneNumber, nickName);
+        CreateUserRequest request = new CreateUserRequest(email, password, userName, phoneNumber, nickName, provider, isCompleted);
         return new User(request);
     }
 

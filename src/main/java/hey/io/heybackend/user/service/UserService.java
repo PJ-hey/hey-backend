@@ -24,8 +24,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
 
-    @Autowired
     UserMapper mapper;
+
+    @Autowired
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder encoder, UserMapper mapper) {
+        this.userRepository = userRepository;
+        this.encoder = encoder;
+        this.mapper = mapper;
+    }
 
     // TODO : 에러 정의
 
@@ -38,6 +44,8 @@ public class UserService {
                     email(request.getEmail()).
                     phoneNumber(request.getPhoneNumber()).
                     nickName(request.getNickName()).
+                    provider(request.getProvider()).
+                    isCompleted(true).
                     build();
             return userRepository.save(user);
         } catch (CustomException e) {
@@ -57,10 +65,11 @@ public class UserService {
     public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        if (!request.getNickName().isBlank()) {
+        if (request.getNickName() != null) {
             validateNickName(request.getNickName());
         }
         mapper.updateUserFromRequest(request, user);
+        System.out.println(user);
         userRepository.save(user);
         return new UpdateUserResponse(userId, request.getNickName());
     }
@@ -77,6 +86,12 @@ public class UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         userRepository.delete(user);
+    }
+
+    @Transactional
+    public User findOneByEmailAndProvider(String email, String provider) {
+        User user = userRepository.findByEmailAndProvider(email, provider).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return user;
     }
 
 }

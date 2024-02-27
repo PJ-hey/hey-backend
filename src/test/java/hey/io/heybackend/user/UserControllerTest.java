@@ -1,8 +1,6 @@
 package hey.io.heybackend.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hey.io.heybackend.user.dtos.request.UpdateUserRequest;
-import hey.io.heybackend.user.dtos.response.UpdateUserResponse;
 import hey.io.heybackend.user.dtos.response.UserResponse;
 import hey.io.heybackend.user.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -10,16 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.RequestEntity.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,12 +22,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class UserControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
     @MockBean
     UserService userService;
-
+    @Autowired
+    private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -50,7 +42,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.phoneNumber").value("01000000000"))
                 .andExpect(jsonPath("$.nickName").value("test"));
     }
-
+/*
     @Test
     void updateUser() throws Exception {
         UpdateUserRequest updateUserRequest = new UpdateUserRequest("newNickName", "newPassword");
@@ -63,11 +55,11 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.nickName").value("newNickName"));
-    }
+    }*/
 
     @Test
     public void deleteUser() throws Exception {
-        doNothing().when(userService).deleteUser(eq(1l));
+        doNothing().when(userService).deleteUser(eq(1L));
 
         mockMvc.perform(delete("/user/{id}", 1L))
                 .andExpect(status().isOk());

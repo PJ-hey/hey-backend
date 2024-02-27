@@ -39,7 +39,6 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         Map<String, Object> attributes = oAuth2User.getAttributes();
         User userProfile = OAuthAttributes.extract(registrationId, attributes);
         userProfile.setProvider(registrationId);
-        System.out.println(userProfile);
 
         Map<String, Object> customAttribute = customAttribute(attributes, userNameAttributeName, userProfile, registrationId);
         return new DefaultOAuth2User(

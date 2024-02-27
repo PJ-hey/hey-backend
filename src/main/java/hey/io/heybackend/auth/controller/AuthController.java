@@ -11,6 +11,7 @@ import hey.io.heybackend.email.service.EmailService;
 import hey.io.heybackend.oauth.service.OAuthService;
 import hey.io.heybackend.user.dtos.request.CreateUserRequest;
 import hey.io.heybackend.user.entities.User;
+import hey.io.heybackend.user.entities.UserBuilder;
 import hey.io.heybackend.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,9 +60,22 @@ public class AuthController {
     }
 
     @GetMapping("/auth/oauth/loginInfo")
-    public Map<String, Object> OAuthSignup(Authentication authentication) {
+    public User OAuthSignup(Authentication authentication) {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        return oAuth2User.getAttributes();
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        String email = (String) attributes.get("email");
+        String provider = (String) attributes.get("provider");
+        User user;
+        try {
+            user = userService.findOneByEmailAndProvider(email, provider);
+        } catch (Exception e) {
+            user = new UserBuilder().
+                    email(email).
+                    provider(provider).
+                    isCompleted(false).
+                    build();
+        }
+        return user;
     }
 
     @PostMapping("/auth/{uuid}/verify")
