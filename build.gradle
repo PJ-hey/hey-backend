@@ -31,6 +31,7 @@ dependencies {
     implementation "jakarta.transaction:jakarta.transaction-api"
     implementation "org.mockito:mockito-core:5.10.0"
     implementation "com.icegreen:greenmail-junit5:1.6.11"
+    implementation "commons-validator:commons-validator:1.8.0"
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
     compileOnly 'org.projectlombok:lombok'

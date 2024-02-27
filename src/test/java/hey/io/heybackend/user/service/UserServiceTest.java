@@ -31,7 +31,7 @@ public class UserServiceTest {
 
     @Test
     public void createUser_success() {
-        CreateUserRequest request = new CreateUserRequest("", "", "", "", "");
+        CreateUserRequest request = new CreateUserRequest("123@naver.com", "12345678", "test", "1111111111", "test");
 
         User user = new User(request);
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
@@ -39,11 +39,18 @@ public class UserServiceTest {
     }
 
     @Test
-    public void createUser_failed() {
-        CreateUserRequest request = new CreateUserRequest("", "", "", "", "");
+    public void createUser_save_failed() {
+        CreateUserRequest request = new CreateUserRequest("123@naver.com", "12345678", "test", "1111111111", "test");
 
         User user = new User(request);
         Mockito.when(userRepository.save(Mockito.any())).thenThrow(new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+        Assertions.assertThrows(CustomException.class, () -> userService.createUser(request));
+    }
+
+    @Test
+    public void createUser_validation_failed() {
+        CreateUserRequest request = new CreateUserRequest("", "12345678", "test", "1111111111", "test");
+
         Assertions.assertThrows(CustomException.class, () -> userService.createUser(request));
     }
 }

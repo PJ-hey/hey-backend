@@ -7,6 +7,7 @@ import hey.io.heybackend.user.dtos.request.UpdateUserRequest;
 import hey.io.heybackend.user.dtos.response.UpdateUserResponse;
 import hey.io.heybackend.user.dtos.response.UserResponse;
 import hey.io.heybackend.user.entities.User;
+import hey.io.heybackend.user.entities.UserBuilder;
 import hey.io.heybackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,15 +27,19 @@ public class UserService {
     @Transactional
     public User createUser(CreateUserRequest request) {
         try {
-            String hashedPassword = encoder.encode(request.getPassword());
-            User user = new User(request);
-            User savedUser = userRepository.save(user);
-
-            return savedUser;
+            User user = new UserBuilder().
+                    userName(request.getUserName()).
+                    password(request.getPassword()).
+                    email(request.getEmail()).
+                    phoneNumber(request.getPhoneNumber()).
+                    nickName(request.getNickName()).
+                    build();
+            return userRepository.save(user);
+        } catch (CustomException e) {
+            throw e;
         } catch (Exception e) {
             throw new CustomException(ErrorCode.USER_SAVED_FAILED);
         }
-
     }
 
     public UserResponse getUser(Long userId) {
