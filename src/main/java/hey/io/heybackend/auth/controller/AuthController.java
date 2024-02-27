@@ -8,6 +8,9 @@ import hey.io.heybackend.authToken.service.AuthTokenService;
 import hey.io.heybackend.common.response.ResponseDTO;
 import hey.io.heybackend.email.dtos.SendMessageDTO;
 import hey.io.heybackend.email.service.EmailService;
+import hey.io.heybackend.user.dtos.request.CreateUserRequest;
+import hey.io.heybackend.user.entities.User;
+import hey.io.heybackend.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +22,12 @@ import java.util.UUID;
 public class AuthController {
 
     private final EmailService emailService;
+    private final UserService userService;
     private final AuthTokenService authTokenService;
 
-    public AuthController(EmailService emailService, AuthTokenService authTokenService) {
+    public AuthController(EmailService emailService, AuthTokenService authTokenService, UserService userService) {
         this.emailService = emailService;
+        this.userService = userService;
         this.authTokenService = authTokenService;
     }
 
@@ -37,6 +42,13 @@ public class AuthController {
         SendMessageDTO dto = new SendMessageDTO(body.getEmail(), authToken.getVerificationCode());
         emailService.sendMessage(dto);
         ResponseDTO<AuthToken> responseDTO = new ResponseDTO<>(true, Optional.of(authToken));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/auth/signup")
+    public ResponseEntity<ResponseDTO<User>> Signup(@RequestBody CreateUserRequest body) {
+        User savedUser = userService.createUser(body);
+        ResponseDTO<User> responseDTO = new ResponseDTO<>(true, Optional.of(savedUser));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
