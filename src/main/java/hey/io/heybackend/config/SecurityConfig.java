@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -59,7 +58,13 @@ public class SecurityConfig {
                                 frameOptionsConfig.disable()
                         )
                 )
-
+                .oauth2Login((oauth2Login) -> {
+                    oauth2Login.defaultSuccessUrl("/auth/oauth/loginInfo", true);
+                })
+                .logout(
+                        logout -> logout
+                                .logoutSuccessUrl("/")
+                )
                 .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
                                 .anyRequest().permitAll()
@@ -67,9 +72,6 @@ public class SecurityConfig {
                 .exceptionHandling((exceptionConfig) ->
                         exceptionConfig.authenticationEntryPoint(unauthorizedEntryPoint).accessDeniedHandler(accessDeniedHandler)
                 )
-                .oauth2Login((oauth2Login) -> oauth2Login.defaultSuccessUrl("/auth/oauth/loginInfo", true))
-                .oauth2Client(Customizer.withDefaults())
-
         ;
 
         return http.build();

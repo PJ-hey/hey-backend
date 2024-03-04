@@ -9,11 +9,18 @@ import java.util.function.Function;
 
 public enum OAuthAttributes {
     GOOGLE("google", (attributes) -> {
-        User user = new UserBuilder()
+        return new UserBuilder()
                 .userName((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
                 .build();
-        return user;
+    }),
+
+    KAKAO("kakao", (attributes) -> {
+        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+        Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
+        return new UserBuilder()
+                .userName((String) kakaoProfile.get("nickname"))
+                .build();
     });
 
     private final String registrationId;

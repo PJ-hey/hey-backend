@@ -72,7 +72,7 @@ public class AuthControllerTest {
 
     @Test
     void Signup_email_validation_failed() throws Exception {
-        CreateUserRequest request = new CreateUserRequest("123", "12345678", "test", "111111111", "test");
+        CreateUserRequest request = new CreateUserRequest("123", "12345678", "test", "111111111", "test", null, true);
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(request);
         this.mockMvc.perform(MockMvcRequestBuilders.post("/auth/signup").content(body).contentType("application/json")).
@@ -81,7 +81,7 @@ public class AuthControllerTest {
 
     @Test
     void Signup_password_validation_failed() throws Exception {
-        CreateUserRequest request = new CreateUserRequest("123@test.com", "", "test", "111111111", "test");
+        CreateUserRequest request = new CreateUserRequest("123@test.com", "", "test", "111111111", "test", null, true);
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(request);
         this.mockMvc.perform(MockMvcRequestBuilders.post("/auth/signup").content(body).contentType("application/json")).
@@ -90,7 +90,7 @@ public class AuthControllerTest {
 
     @Test
     void Signup_username_validation_failed() throws Exception {
-        CreateUserRequest request = new CreateUserRequest("123@test.com", "12345678", "", "111111111", "test");
+        CreateUserRequest request = new CreateUserRequest("123@test.com", "12345678", "", "111111111", "test", null, true);
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(request);
         this.mockMvc.perform(MockMvcRequestBuilders.post("/auth/signup").content(body).contentType("application/json")).
@@ -99,7 +99,7 @@ public class AuthControllerTest {
 
     @Test
     void Signup_phonenumber_validation_failed() throws Exception {
-        CreateUserRequest request = new CreateUserRequest("123@test.com", "12345678", "test", "", "test");
+        CreateUserRequest request = new CreateUserRequest("123@test.com", "12345678", "test", "", "test", null, true);
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(request);
         this.mockMvc.perform(MockMvcRequestBuilders.post("/auth/signup").content(body).contentType("application/json")).
@@ -108,7 +108,7 @@ public class AuthControllerTest {
 
     @Test
     void Signup_nickName_validation_failed() throws Exception {
-        CreateUserRequest request = new CreateUserRequest("123@test.com", "12345678", "test", "111111111", "");
+        CreateUserRequest request = new CreateUserRequest("123@test.com", "12345678", "test", "111111111", "", null, true);
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(request);
         this.mockMvc.perform(MockMvcRequestBuilders.post("/auth/signup").content(body).contentType("application/json")).
