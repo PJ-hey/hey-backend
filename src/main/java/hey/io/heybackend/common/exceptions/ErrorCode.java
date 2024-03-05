@@ -22,6 +22,7 @@ public enum ErrorCode {
     /* 404 NOT_FOUND: Resource를 찾을 수 없음 */
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "토큰을 찾을 수 없습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
+    SHOW_NOT_FOUND(HttpStatus.NOT_FOUND, "공연을 찾을 수 없습니다."),
 
     /* 409 CONFLICT: 리소스 요청 충돌 */
     DUPLICATED_USER_NICKNAME(HttpStatus.CONFLICT, "중복된 닉네임입니다."),

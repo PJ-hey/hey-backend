@@ -1,4 +1,4 @@
-package hey.io.heybackend.user;
+package hey.io.heybackend.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hey.io.heybackend.user.dtos.request.UpdateUserRequest;
