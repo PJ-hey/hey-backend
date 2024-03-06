@@ -14,7 +14,6 @@ import java.util.List;
 public class UpdateShowRequest {
 
     private String name;
-    private String urlId;
     private LocalDateTime ticketOpenTime;
     private LocalDateTime date;
     private Integer strictedAge;
@@ -22,7 +21,6 @@ public class UpdateShowRequest {
     private String place;
     private String type;
     private String genre;
-    private List<String> images;
     private Boolean isConfirmed;
 
 }

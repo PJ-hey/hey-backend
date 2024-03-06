@@ -85,6 +85,8 @@ public class ShowService {
         Show show = showRepository.findById(showId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SHOW_NOT_FOUND));
 
+        show.updateShow(request);
+
         return new ShowResponse(show);
 
     }

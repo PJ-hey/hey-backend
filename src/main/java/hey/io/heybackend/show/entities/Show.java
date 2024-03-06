@@ -2,6 +2,7 @@ package hey.io.heybackend.show.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hey.io.heybackend.common.entities.CommonModel;
+import hey.io.heybackend.show.dtos.request.UpdateShowRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -51,6 +52,18 @@ public class Show extends CommonModel {
 
     private Boolean isConfirmed;
 
+
+    public void updateShow(UpdateShowRequest request) {
+        this.name = request.getName();
+        this.ticketOpenTime = request.getTicketOpenTime();
+        this.date = request.getDate();
+        this.strictedAge = request.getStrictedAge();
+        this.runningTime = request.getRunningTime();
+        this.place = request.getPlace();
+        this.type = request.getType();
+        this.genre = request.getGenre();
+        this.isConfirmed = request.getIsConfirmed();
+    }
 
     public void addPriceInfo(List<PriceInfo> priceInfos) {
 
