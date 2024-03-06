@@ -44,7 +44,7 @@ public class Show extends CommonModel {
     private String type;
     private String genre;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     private List<String> images = new ArrayList<>();
 
 //    private List<User> followedUsers = new ArrayList<>();

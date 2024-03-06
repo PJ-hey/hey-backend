@@ -42,7 +42,7 @@ public class ShowService {
                 .place(request.getPlace())
                 .type(request.getType())
                 .genre(request.getGenre())
-                .images(new ArrayList<>())
+                .images(request.getImages())
                 .isConfirmed(request.getIsConfirmed())
                 .build();
 
@@ -53,6 +53,7 @@ public class ShowService {
         List<TicketSeller> ticketSellers = request.getTicketSellers().stream()
                 .map(ticketSeller -> TicketSeller.of(ticketSeller.getName(), ticketSeller.getBaseUrl(), ticketSeller.getIcon()))
                 .collect(Collectors.toList());
+
 
         show.addPriceInfo(priceInfos);
         show.addTicketSeller(ticketSellers);
