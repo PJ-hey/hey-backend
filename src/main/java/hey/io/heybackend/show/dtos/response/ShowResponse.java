@@ -11,11 +11,15 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class ShowResponse {
 
     private Long id;
@@ -35,7 +39,8 @@ public class ShowResponse {
     private String type;
     private String genre;
 
-    private List<String> images = new ArrayList<>();
+    private String poster;
+    private List<String> detailImages = new ArrayList<>();
 
 //    private List<User> followedUsers = new ArrayList<>();
     private Boolean isConfirmed;
@@ -57,9 +62,24 @@ public class ShowResponse {
         this.place = show.getPlace();
         this.type = show.getType();
         this.genre = show.getGenre();
-        this.images = show.getImages();
+
+        if (!show.getImages().isEmpty()) {
+            this.poster = show.getImages().get(0);
+            this.detailImages.addAll(show.getImages().subList(1, show.getImages().size()));
+        }
+
         this.isConfirmed = show.getIsConfirmed();
         this.createdAt = show.getCreatedAt();
         this.updatedAt = show.getUpdatedAt();
     }
+
+
+
+
+
+
+
+
+
+
 }
