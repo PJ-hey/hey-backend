@@ -54,7 +54,6 @@ public class ShowService {
                 .map(ticketSeller -> TicketSeller.of(ticketSeller.getName(), ticketSeller.getBaseUrl(), ticketSeller.getIcon()))
                 .collect(Collectors.toList());
 
-
         show.addPriceInfo(priceInfos);
         show.addTicketSeller(ticketSellers);
 
