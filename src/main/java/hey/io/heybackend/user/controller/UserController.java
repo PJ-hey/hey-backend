@@ -2,18 +2,19 @@ package hey.io.heybackend.user.controller;
 
 import hey.io.heybackend.common.response.ResponseDTO;
 import hey.io.heybackend.user.dtos.request.UpdateUserRequest;
-import hey.io.heybackend.user.dtos.response.UserResponse;
 import hey.io.heybackend.user.dtos.response.UpdateUserResponse;
+import hey.io.heybackend.user.dtos.response.UserResponse;
 import hey.io.heybackend.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@Slf4j
+@Tag(name = "UserController", description = "프로필 조회/수정/삭제 API")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
@@ -21,7 +22,8 @@ public class UserController {
 
     private final UserService userService;
 
-
+    @Tag(name = "UserController")
+    @Operation(summary = "프로필 조회 API", description = "프로필 조회")
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDTO<UserResponse>> getUser(@PathVariable("id") Long userId) {
 
@@ -31,6 +33,8 @@ public class UserController {
 
     }
 
+    @Tag(name = "UserController")
+    @Operation(summary = "프로필 수정 API", description = "프로필 수정")
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO<UpdateUserResponse>> updateUser(@PathVariable("id") Long userId, @RequestBody UpdateUserRequest request) {
 
@@ -40,11 +44,13 @@ public class UserController {
 
     }
 
+    @Tag(name = "UserController")
+    @Operation(summary = "회원탈퇴 API", description = "회원탈퇴")
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDTO<Void>> deleteUser(@PathVariable("id") Long userId) {
 
         userService.deleteUser(userId);
-        ResponseDTO<Void> responseDTO = new ResponseDTO<>(true, null);
+        ResponseDTO<Void> responseDTO = new ResponseDTO<>(true, Optional.empty());
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 }
