@@ -1,20 +1,22 @@
 package hey.io.heybackend.user.entities;
 
 import hey.io.heybackend.common.entities.CommonModel;
+import hey.io.heybackend.show.entities.Show;
 import hey.io.heybackend.user.dtos.request.CreateUserRequest;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.List;
 
 @Entity
 @Getter
+@Builder
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "\"user\"")
 @EntityListeners(AuditingEntityListener.class)
+@AllArgsConstructor
 public class User extends CommonModel {
 
     private String email;
