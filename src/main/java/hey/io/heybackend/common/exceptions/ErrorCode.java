@@ -15,6 +15,7 @@ public enum ErrorCode {
     USER_USERNAME_NOT_VALID(HttpStatus.BAD_REQUEST, "유저 유저이름 길이가 올바르지 않습니다."),
     USER_PHONENUMBER_NOT_VALID(HttpStatus.BAD_REQUEST, "유저 번호 길이가 올바르지 않습니다."),
     USER_NICKNAME_NOT_VALID(HttpStatus.BAD_REQUEST, "유저 닉네임 길이가 올바르지 않습니다."),
+    ALREADY_FOLLOW_SHOW(HttpStatus.BAD_REQUEST, "이미 팔로우한 공연입니다."),
 
     /* 401 UNAUTHORIZED: 인증되지 않음*/
     TOKEN_VERIFY_FAILED(HttpStatus.UNAUTHORIZED, "인증번호가 일치하지 않습니다."),
@@ -22,6 +23,7 @@ public enum ErrorCode {
     /* 404 NOT_FOUND: Resource를 찾을 수 없음 */
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "토큰을 찾을 수 없습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
+    SHOW_NOT_FOUND(HttpStatus.NOT_FOUND, "공연을 찾을 수 없습니다."),
 
     /* 409 CONFLICT: 리소스 요청 충돌 */
     DUPLICATED_USER_NICKNAME(HttpStatus.CONFLICT, "중복된 닉네임입니다."),

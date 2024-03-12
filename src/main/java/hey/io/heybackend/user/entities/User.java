@@ -3,16 +3,18 @@ package hey.io.heybackend.user.entities;
 import hey.io.heybackend.common.entities.CommonModel;
 import hey.io.heybackend.user.dtos.request.CreateUserRequest;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
+@Builder
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "\"user\"")
 @EntityListeners(AuditingEntityListener.class)
 public class User extends CommonModel {
@@ -29,6 +31,10 @@ public class User extends CommonModel {
 
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserFollowShow> userFollows = new ArrayList<>();
 
     public User(CreateUserRequest request) {
         this.email = request.getEmail();
