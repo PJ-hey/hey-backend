@@ -22,8 +22,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
 
-    // TODO : 에러 정의
-
     @Transactional
     public User createUser(CreateUserRequest request) {
         try {

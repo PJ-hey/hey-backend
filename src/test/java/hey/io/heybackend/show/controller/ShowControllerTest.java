@@ -46,11 +46,10 @@ public class ShowControllerTest {
         ShowResponse response = ShowInfoFixture.getCreateShowResponseInfo(request);
         when(showService.createShow(any())).thenReturn(response);
         mockMvc.perform(post("/show")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                        .andDo(print())
-                        .andExpect(status().isOk());
-
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -60,10 +59,9 @@ public class ShowControllerTest {
         when(showService.getShow(any())).thenReturn(Page.empty());
 
         mockMvc.perform(get("/show")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
-
     }
 
     @Test
@@ -76,7 +74,7 @@ public class ShowControllerTest {
         when(showService.getShowInfo(any())).thenReturn(response);
 
         mockMvc.perform(get("/show/1")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -93,7 +91,6 @@ public class ShowControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
                 .andExpect(status().isOk());
-
     }
 
     @Test

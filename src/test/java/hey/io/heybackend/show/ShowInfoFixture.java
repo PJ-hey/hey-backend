@@ -110,6 +110,4 @@ public class ShowInfoFixture {
                 .build();
         return response;
     }
-
-
 }

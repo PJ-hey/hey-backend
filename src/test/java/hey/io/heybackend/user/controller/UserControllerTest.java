@@ -1,28 +1,30 @@
 package hey.io.heybackend.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hey.io.heybackend.user.UserInfoFixture;
+import hey.io.heybackend.user.dtos.request.FollowShowListRequest;
+import hey.io.heybackend.user.dtos.request.FollowShowRequest;
 import hey.io.heybackend.user.dtos.request.UpdateUserRequest;
+import hey.io.heybackend.user.dtos.response.FollowShowResponse;
 import hey.io.heybackend.user.dtos.response.UpdateUserResponse;
 import hey.io.heybackend.user.dtos.response.UserResponse;
+import hey.io.heybackend.user.service.UserFollowService;
 import hey.io.heybackend.user.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.RequestEntity.put;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,7 +37,10 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    UserService userService;
+    private UserService userService;
+
+    @MockBean
+    private UserFollowService userFollowService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -74,6 +79,35 @@ public class UserControllerTest {
 
         mockMvc.perform(delete("/user/{id}", 1L))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    void followShow() throws Exception {
+
+        FollowShowRequest request = UserInfoFixture.getFollowShowRequestInfo();
+        FollowShowResponse response = UserInfoFixture.getFollowShowResponseInfo(request);
+        when(userFollowService.followShow(any())).thenReturn(response);
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/followed_show")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    @WithMockUser
+    void getFollowShow() throws Exception {
+
+        FollowShowListRequest request = UserInfoFixture.getFollowShowListRequestInfo();
+
+        when(userFollowService.getFollowShow(any(), any())).thenReturn(Page.empty());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/followed_show")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
     }
 
 }

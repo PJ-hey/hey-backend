@@ -4,7 +4,6 @@ import hey.io.heybackend.common.response.ResponseDTO;
 import hey.io.heybackend.show.dtos.request.CreateShowRequest;
 import hey.io.heybackend.show.dtos.request.UpdateShowRequest;
 import hey.io.heybackend.show.dtos.response.ShowResponse;
-import hey.io.heybackend.show.entities.Show;
 import hey.io.heybackend.show.service.ShowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-
-import static org.hibernate.query.sqm.tree.SqmNode.log;
 
 @RestController
 @RequiredArgsConstructor
@@ -70,4 +67,5 @@ public class ShowController {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
     }
+
 }

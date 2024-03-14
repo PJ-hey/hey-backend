@@ -23,7 +23,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
 @SpringBootTest
 public class ShowServiceTest {
 
@@ -90,6 +89,4 @@ public class ShowServiceTest {
         assertEquals(ErrorCode.SHOW_NOT_FOUND, exception.getErrorCode());
 
     }
-
 }
-

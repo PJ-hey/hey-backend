@@ -35,5 +35,4 @@ public class TicketSeller extends CommonModel {
     public void setShow(Show show) {
         this.show = show;
     }
-
 }

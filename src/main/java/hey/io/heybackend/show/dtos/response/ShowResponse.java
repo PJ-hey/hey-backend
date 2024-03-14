@@ -11,10 +11,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -24,13 +21,9 @@ public class ShowResponse {
 
     private Long id;
     private String name;
-
     private List<PriceInfo> priceInfos = new ArrayList<>();
-
     private List<TicketSeller> ticketSellers = new ArrayList<>();
-
     private String urlId;
-//    private Artist artist;
     private LocalDateTime ticketOpenTime;
     private LocalDateTime date;
     private Integer strictedAge;
@@ -38,16 +31,11 @@ public class ShowResponse {
     private String place;
     private String type;
     private String genre;
-
     private String poster;
     private List<String> detailImages = new ArrayList<>();
-
-//    private List<User> followedUsers = new ArrayList<>();
     private Boolean isConfirmed;
-
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
 
     public ShowResponse(Show show) {
         this.id = show.getId();
@@ -72,14 +60,4 @@ public class ShowResponse {
         this.createdAt = show.getCreatedAt();
         this.updatedAt = show.getUpdatedAt();
     }
-
-
-
-
-
-
-
-
-
-
 }
