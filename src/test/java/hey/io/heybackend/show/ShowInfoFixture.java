@@ -6,6 +6,7 @@ import hey.io.heybackend.show.dtos.response.ShowResponse;
 import hey.io.heybackend.show.entities.PriceInfo;
 import hey.io.heybackend.show.entities.Show;
 import hey.io.heybackend.show.entities.TicketSeller;
+import hey.io.heybackend.user.dtos.request.FollowShowListRequest;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;

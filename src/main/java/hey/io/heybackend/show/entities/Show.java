@@ -48,6 +48,10 @@ public class Show extends CommonModel {
     @ElementCollection(fetch = FetchType.LAZY)
     private List<String> images = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "show", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserFollowShow> followShows = new ArrayList<>();
+
     private Boolean isConfirmed;
 
 

@@ -7,6 +7,7 @@ import hey.io.heybackend.show.entities.Show;
 import hey.io.heybackend.show.repository.ShowRepository;
 import hey.io.heybackend.user.dtos.request.FollowShowListRequest;
 import hey.io.heybackend.user.dtos.request.FollowShowRequest;
+import hey.io.heybackend.user.dtos.response.FollowShowResponse;
 import hey.io.heybackend.user.entities.User;
 import hey.io.heybackend.user.entities.UserFollowShow;
 import hey.io.heybackend.user.repository.UserFollowShowRepository;
@@ -29,8 +30,8 @@ public class UserFollowService {
     private final ShowRepository showRepository;
 
     @Transactional
-    public void followShow(FollowShowRequest request) {
-        User user = userRepository.findById(request.getId())
+    public FollowShowResponse followShow(FollowShowRequest request) {
+        User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Show show = showRepository.findById(request.getShowId())
                 .orElseThrow(() -> new CustomException(ErrorCode.SHOW_NOT_FOUND));
@@ -40,9 +41,11 @@ public class UserFollowService {
         if (userFollowShowOptional.isPresent()) {
             UserFollowShow userFollowShow = userFollowShowOptional.get();
             userFollowShowRepository.delete(userFollowShow);
+            return new FollowShowResponse(user.getId(), show.getId(), "unfollow");
         } else {
             UserFollowShow userFollowShow = UserFollowShow.of(user, show);
             userFollowShowRepository.save(userFollowShow);
+            return new FollowShowResponse(user.getId(), show.getId(), "follow");
         }
     }
 

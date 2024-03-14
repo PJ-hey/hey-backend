@@ -90,5 +90,4 @@ public class ShowServiceTest {
         assertEquals(ErrorCode.SHOW_NOT_FOUND, exception.getErrorCode());
 
     }
-
 }

@@ -35,11 +35,10 @@ public class ShowResponse {
     private String place;
     private String type;
     private String genre;
-
     private String poster;
+
     private List<String> detailImages = new ArrayList<>();
 
-    //    private List<User> followedUsers = new ArrayList<>();
     private Boolean isConfirmed;
 
     private LocalDateTime createdAt;

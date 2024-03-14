@@ -1,4 +1,4 @@
-package hey.io.heybackend.user.dtos.request;
+package hey.io.heybackend.user.dtos.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,11 +7,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class FollowShowRequest {
+@AllArgsConstructor
+public class FollowShowResponse {
 
     private Long userId;
     private Long showId;
+    private String message;
 
 }

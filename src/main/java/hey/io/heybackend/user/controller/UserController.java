@@ -5,6 +5,7 @@ import hey.io.heybackend.show.dtos.response.ShowResponse;
 import hey.io.heybackend.user.dtos.request.FollowShowListRequest;
 import hey.io.heybackend.user.dtos.request.FollowShowRequest;
 import hey.io.heybackend.user.dtos.request.UpdateUserRequest;
+import hey.io.heybackend.user.dtos.response.FollowShowResponse;
 import hey.io.heybackend.user.dtos.response.UpdateUserResponse;
 import hey.io.heybackend.user.dtos.response.UserResponse;
 import hey.io.heybackend.user.service.UserFollowService;
@@ -63,10 +64,10 @@ public class UserController {
     }
 
     @PostMapping("/followed_show")
-    public ResponseEntity<ResponseDTO<String>> followShow(@RequestBody FollowShowRequest request) {
+    public ResponseEntity<ResponseDTO<FollowShowResponse>> followShow(@RequestBody FollowShowRequest request) {
 
-        userFollowService.followShow(request);
-        ResponseDTO<String> responseDTO = new ResponseDTO<>(true, Optional.empty());
+        FollowShowResponse followShowResponse = userFollowService.followShow(request);
+        ResponseDTO<FollowShowResponse> responseDTO = new ResponseDTO<>(true, Optional.of(followShowResponse));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
     }
