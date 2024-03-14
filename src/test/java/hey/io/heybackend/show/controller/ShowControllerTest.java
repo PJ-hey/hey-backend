@@ -50,7 +50,6 @@ public class ShowControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
                 .andExpect(status().isOk());
-
     }
 
     @Test
@@ -63,7 +62,6 @@ public class ShowControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
-
     }
 
     @Test
@@ -93,7 +91,6 @@ public class ShowControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
                 .andExpect(status().isOk());
-
     }
 
     @Test

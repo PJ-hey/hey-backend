@@ -21,13 +21,9 @@ public class ShowResponse {
 
     private Long id;
     private String name;
-
     private List<PriceInfo> priceInfos = new ArrayList<>();
-
     private List<TicketSeller> ticketSellers = new ArrayList<>();
-
     private String urlId;
-    //    private Artist artist;
     private LocalDateTime ticketOpenTime;
     private LocalDateTime date;
     private Integer strictedAge;
@@ -36,14 +32,10 @@ public class ShowResponse {
     private String type;
     private String genre;
     private String poster;
-
     private List<String> detailImages = new ArrayList<>();
-
     private Boolean isConfirmed;
-
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
 
     public ShowResponse(Show show) {
         this.id = show.getId();
@@ -68,14 +60,4 @@ public class ShowResponse {
         this.createdAt = show.getCreatedAt();
         this.updatedAt = show.getUpdatedAt();
     }
-
-
-
-
-
-
-
-
-
-
 }

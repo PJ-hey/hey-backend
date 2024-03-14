@@ -25,8 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -89,10 +88,9 @@ public class UserControllerTest {
         FollowShowRequest request = UserInfoFixture.getFollowShowRequestInfo();
         FollowShowResponse response = UserInfoFixture.getFollowShowResponseInfo(request);
         when(userFollowService.followShow(any())).thenReturn(response);
-        mockMvc.perform(post("/user/followed_show")
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/followed_show")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andDo(print())
                 .andExpect(status().isOk());
 
     }
@@ -105,10 +103,9 @@ public class UserControllerTest {
 
         when(userFollowService.getFollowShow(any(), any())).thenReturn(Page.empty());
 
-        mockMvc.perform(get("/user/followed_show")
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/followed_show")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andDo(print())
                 .andExpect(status().isOk());
 
     }

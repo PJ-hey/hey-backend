@@ -3,7 +3,6 @@ package hey.io.heybackend.show.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hey.io.heybackend.common.entities.CommonModel;
 import hey.io.heybackend.show.dtos.request.UpdateShowRequest;
-import hey.io.heybackend.user.entities.UserFollowShow;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 public class Show extends CommonModel {
 
-
     private String name;
 
     @Builder.Default
@@ -35,8 +33,6 @@ public class Show extends CommonModel {
 
     private String urlId;
 
-//    private Artist artist;
-
     private LocalDateTime ticketOpenTime;
     private LocalDateTime date;
     private Integer strictedAge;
@@ -48,12 +44,7 @@ public class Show extends CommonModel {
     @ElementCollection(fetch = FetchType.LAZY)
     private List<String> images = new ArrayList<>();
 
-    @Builder.Default
-    @OneToMany(mappedBy = "show", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<UserFollowShow> followShows = new ArrayList<>();
-
     private Boolean isConfirmed;
-
 
     public void updateShow(UpdateShowRequest request) {
         this.name = request.getName();
@@ -68,18 +59,12 @@ public class Show extends CommonModel {
     }
 
     public void addPriceInfo(List<PriceInfo> priceInfos) {
-
         this.priceInfos.addAll(priceInfos);
         priceInfos.forEach(priceInfo -> priceInfo.setShow(this));
-
     }
 
     public void addTicketSeller(List<TicketSeller> ticketSellers) {
-
         this.ticketSellers.addAll(ticketSellers);
         ticketSellers.forEach(ticketSeller -> ticketSeller.setShow(this));
-
     }
-
-
 }

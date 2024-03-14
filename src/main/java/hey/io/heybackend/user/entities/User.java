@@ -11,8 +11,8 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder
 @Setter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "\"user\"")
@@ -20,13 +20,9 @@ import java.util.List;
 public class User extends CommonModel {
 
     private String email;
-
     private String password;
-
     private String userName;
-
     private String phoneNumber;
-
     private String nickName;
 
     @Enumerated(EnumType.STRING)
@@ -48,5 +44,4 @@ public class User extends CommonModel {
         this.nickName = nickName;
         this.password = password;
     }
-
 }
