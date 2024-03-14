@@ -21,10 +21,15 @@ import org.springframework.web.client.HttpServerErrorException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+
 import static org.assertj.core.api.InstanceOfAssertFactories.optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +52,7 @@ public class UserServiceTest {
         User user = new User(request);
         when(userRepository.save(any())).thenReturn(user);
         assertEquals(user, userService.createUser(request));
+
     }
 
     @Test
@@ -136,3 +142,4 @@ public class UserServiceTest {
         verify(userRepository, never()).delete(any());
     }
 }
+
