@@ -1,6 +1,7 @@
 package hey.io.heybackend.show.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hey.io.heybackend.artist.entities.Artist;
 import hey.io.heybackend.common.entities.CommonModel;
 import hey.io.heybackend.show.dtos.request.UpdateShowRequest;
 import jakarta.persistence.*;
@@ -23,15 +24,17 @@ public class Show extends CommonModel {
 
     @Builder.Default
     @OneToMany(mappedBy = "show", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<PriceInfo> priceInfos = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "show", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<TicketSeller> ticketSellers = new ArrayList<>();
 
     private String urlId;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "show", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ShowArtist> artists = new ArrayList<>();
 
     private LocalDateTime ticketOpenTime;
     private LocalDateTime date;
@@ -67,4 +70,10 @@ public class Show extends CommonModel {
         this.ticketSellers.addAll(ticketSellers);
         ticketSellers.forEach(ticketSeller -> ticketSeller.setShow(this));
     }
+
+    public void addShowArtist(ShowArtist showArtist) {
+        this.artists.add(showArtist);
+    }
+
+
 }

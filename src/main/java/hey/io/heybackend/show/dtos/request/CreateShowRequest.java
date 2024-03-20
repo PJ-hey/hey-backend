@@ -27,6 +27,9 @@ public class CreateShowRequest {
     private List<TicketSeller> ticketSellers = new ArrayList<>();
 
     private String urlId;
+
+    private List<String> artistNames;
+
     private LocalDateTime ticketOpenTime;
     private LocalDateTime date;
     private Integer strictedAge;

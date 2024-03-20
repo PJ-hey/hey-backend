@@ -1,10 +1,10 @@
 package hey.io.heybackend.user.controller;
 
+import hey.io.heybackend.artist.dtos.response.ArtistResponse;
 import hey.io.heybackend.common.response.ResponseDTO;
 import hey.io.heybackend.show.dtos.response.ShowResponse;
-import hey.io.heybackend.user.dtos.request.FollowShowListRequest;
-import hey.io.heybackend.user.dtos.request.FollowShowRequest;
-import hey.io.heybackend.user.dtos.request.UpdateUserRequest;
+import hey.io.heybackend.user.dtos.request.*;
+import hey.io.heybackend.user.dtos.response.FollowArtistResponse;
 import hey.io.heybackend.user.dtos.response.FollowShowResponse;
 import hey.io.heybackend.user.dtos.response.UpdateUserResponse;
 import hey.io.heybackend.user.dtos.response.UserResponse;
@@ -77,6 +77,24 @@ public class UserController {
 
         Page<ShowResponse> showResponses = userFollowService.getFollowShow(request, pageable);
         ResponseDTO<Page<ShowResponse>> responseDTO = new ResponseDTO<>(true, Optional.of(showResponses));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+
+    }
+
+    @PostMapping("/followed_artist")
+    public ResponseEntity<ResponseDTO<FollowArtistResponse>> followShow(@RequestBody FollowArtistRequest request) {
+
+        FollowArtistResponse followArtistResponse = userFollowService.followArtist(request);
+        ResponseDTO<FollowArtistResponse> responseDTO = new ResponseDTO<>(true, Optional.of(followArtistResponse));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/followed_artist")
+    public ResponseEntity<ResponseDTO<Page<ArtistResponse>>> getFollowShow(@RequestBody FollowArtistListRequest request, Pageable pageable) {
+
+        Page<ArtistResponse> artistResponses = userFollowService.getFollowArtist(request, pageable);
+        ResponseDTO<Page<ArtistResponse>> responseDTO = new ResponseDTO<>(true, Optional.of(artistResponses));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
     }

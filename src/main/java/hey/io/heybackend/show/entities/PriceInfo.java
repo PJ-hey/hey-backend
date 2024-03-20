@@ -13,7 +13,6 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@JsonIgnoreProperties({"show", "createdAt", "updatedAt"})
 public class PriceInfo extends CommonModel {
 
     @ManyToOne(fetch = FetchType.LAZY)

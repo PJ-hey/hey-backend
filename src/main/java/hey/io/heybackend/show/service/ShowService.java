@@ -1,13 +1,18 @@
 package hey.io.heybackend.show.service;
 
+import hey.io.heybackend.artist.entities.Artist;
+import hey.io.heybackend.artist.repository.ArtistRepository;
 import hey.io.heybackend.common.exceptions.CustomException;
 import hey.io.heybackend.common.exceptions.ErrorCode;
 import hey.io.heybackend.show.dtos.request.CreateShowRequest;
 import hey.io.heybackend.show.dtos.request.UpdateShowRequest;
+import hey.io.heybackend.show.dtos.response.ShowArtistResponse;
 import hey.io.heybackend.show.dtos.response.ShowResponse;
 import hey.io.heybackend.show.entities.PriceInfo;
 import hey.io.heybackend.show.entities.Show;
+import hey.io.heybackend.show.entities.ShowArtist;
 import hey.io.heybackend.show.entities.TicketSeller;
+import hey.io.heybackend.show.repository.ShowArtistRepository;
 import hey.io.heybackend.show.repository.ShowRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +31,7 @@ import java.util.stream.Collectors;
 public class ShowService {
 
     private final ShowRepository showRepository;
+    private final ArtistRepository artistRepository;
 
     @Transactional
     public ShowResponse createShow(CreateShowRequest request) {
@@ -57,7 +63,21 @@ public class ShowService {
         show.addPriceInfo(priceInfos);
         show.addTicketSeller(ticketSellers);
 
+
+
+        List<String> artistNames = request.getArtistNames();
+
+        for(String artistName : artistNames) {
+            Artist artist = artistRepository.findByName(artistName)
+                    .orElseThrow(() -> new CustomException(ErrorCode.ARTIST_NOT_FOUND));
+
+            ShowArtist showArtist = ShowArtist.of(show, artist);
+            show.addShowArtist(showArtist);
+
+        }
+
         Show savedShow = showRepository.save(show);
+
 
         return new ShowResponse(savedShow);
     }
@@ -98,5 +118,6 @@ public class ShowService {
 
         showRepository.delete(show);
     }
+
 
 }

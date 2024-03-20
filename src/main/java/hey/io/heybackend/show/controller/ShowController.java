@@ -3,6 +3,7 @@ package hey.io.heybackend.show.controller;
 import hey.io.heybackend.common.response.ResponseDTO;
 import hey.io.heybackend.show.dtos.request.CreateShowRequest;
 import hey.io.heybackend.show.dtos.request.UpdateShowRequest;
+import hey.io.heybackend.show.dtos.response.ShowArtistResponse;
 import hey.io.heybackend.show.dtos.response.ShowResponse;
 import hey.io.heybackend.show.service.ShowService;
 import lombok.RequiredArgsConstructor;
@@ -67,5 +68,6 @@ public class ShowController {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
     }
+
 
 }
