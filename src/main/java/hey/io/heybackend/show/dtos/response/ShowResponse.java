@@ -1,9 +1,6 @@
 package hey.io.heybackend.show.dtos.response;
 
-import hey.io.heybackend.show.entities.PriceInfo;
 import hey.io.heybackend.show.entities.Show;
-import hey.io.heybackend.show.entities.ShowArtist;
-import hey.io.heybackend.show.entities.TicketSeller;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

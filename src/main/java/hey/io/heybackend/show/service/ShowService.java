@@ -64,7 +64,6 @@ public class ShowService {
         show.addTicketSeller(ticketSellers);
 
 
-
         List<String> artistNames = request.getArtistNames();
 
         for(String artistName : artistNames) {

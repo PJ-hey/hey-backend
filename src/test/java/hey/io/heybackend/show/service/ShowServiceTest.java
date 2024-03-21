@@ -1,11 +1,15 @@
 package hey.io.heybackend.show.service;
 
+import hey.io.heybackend.artist.ArtistInfoFixture;
+import hey.io.heybackend.artist.entities.Artist;
+import hey.io.heybackend.artist.repository.ArtistRepository;
 import hey.io.heybackend.common.exceptions.CustomException;
 import hey.io.heybackend.common.exceptions.ErrorCode;
 import hey.io.heybackend.show.ShowInfoFixture;
 import hey.io.heybackend.show.dtos.request.CreateShowRequest;
 import hey.io.heybackend.show.dtos.request.UpdateShowRequest;
 import hey.io.heybackend.show.entities.Show;
+import hey.io.heybackend.show.entities.ShowArtist;
 import hey.io.heybackend.show.repository.ShowRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +36,16 @@ public class ShowServiceTest {
     @MockBean
     private ShowRepository showRepository;
 
+    @MockBean
+    private ArtistRepository artistRepository;
+
     @Test
     void createShow_success() {
 
         CreateShowRequest request = ShowInfoFixture.getCreateRequestInfo();
+        Artist artist = ArtistInfoFixture.getArtistInfo();
         when(showRepository.save(any())).thenReturn(mock(Show.class));
+        when(artistRepository.findByName(any())).thenReturn(Optional.of(artist));
         assertDoesNotThrow(() -> showService.createShow(request));
 
     }
