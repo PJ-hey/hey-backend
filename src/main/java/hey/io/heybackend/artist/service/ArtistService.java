@@ -4,12 +4,16 @@ import hey.io.heybackend.artist.dtos.request.CreateArtistRequest;
 import hey.io.heybackend.artist.dtos.request.UpdateArtistRequest;
 import hey.io.heybackend.artist.dtos.response.AlbumResponse;
 import hey.io.heybackend.artist.dtos.response.ArtistResponse;
+import hey.io.heybackend.artist.dtos.response.ArtistShowResponse;
 import hey.io.heybackend.artist.entities.Album;
 import hey.io.heybackend.artist.entities.Artist;
 import hey.io.heybackend.artist.repository.AlbumRepository;
 import hey.io.heybackend.artist.repository.ArtistRepository;
 import hey.io.heybackend.common.exceptions.CustomException;
 import hey.io.heybackend.common.exceptions.ErrorCode;
+import hey.io.heybackend.show.dtos.response.ShowListResponse;
+import hey.io.heybackend.show.entities.Show;
+import hey.io.heybackend.show.repository.ShowRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +31,7 @@ public class ArtistService {
 
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
+    private final ShowRepository showRepository;
 
     @Transactional
     public ArtistResponse createArtist(CreateArtistRequest request) {
@@ -86,6 +91,13 @@ public class ArtistService {
         Page<Album> albumPage = albumRepository.findByArtist(artist, pageable);
 
         return albumPage.map(AlbumResponse::new);
+    }
+
+    public Page<ShowListResponse> getArtistShow(Long artistId, Pageable pageable) {
+
+        Page<Show> shows = showRepository.findShowsByArtistId(artistId, pageable);
+
+        return shows.map(ShowListResponse::new);
     }
 
 }

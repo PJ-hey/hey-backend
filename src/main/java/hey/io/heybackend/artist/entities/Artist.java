@@ -3,6 +3,7 @@ package hey.io.heybackend.artist.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hey.io.heybackend.artist.dtos.request.UpdateArtistRequest;
 import hey.io.heybackend.common.entities.CommonModel;
+import hey.io.heybackend.show.entities.ShowArtist;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -35,6 +36,7 @@ public class Artist extends CommonModel {
 
     //    followed_users
 
+
     public void addAlbum(List<Album> albums) {
 
         this.albums.addAll(albums);
@@ -49,4 +51,6 @@ public class Artist extends CommonModel {
         this.debutDate = request.getDebutDate();
 
     }
+
+
 }

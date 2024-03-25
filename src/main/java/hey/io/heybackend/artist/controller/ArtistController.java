@@ -4,8 +4,10 @@ import hey.io.heybackend.artist.dtos.request.CreateArtistRequest;
 import hey.io.heybackend.artist.dtos.request.UpdateArtistRequest;
 import hey.io.heybackend.artist.dtos.response.AlbumResponse;
 import hey.io.heybackend.artist.dtos.response.ArtistResponse;
+import hey.io.heybackend.artist.dtos.response.ArtistShowResponse;
 import hey.io.heybackend.artist.service.ArtistService;
 import hey.io.heybackend.common.response.ResponseDTO;
+import hey.io.heybackend.show.dtos.response.ShowListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -65,6 +67,15 @@ public class ArtistController {
 
         Page<AlbumResponse> albumResponse = artistService.getAlbums(artistId, pageable);
         ResponseDTO<Page<AlbumResponse>> responseDTO = new ResponseDTO<>(true, Optional.of(albumResponse));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/{id}/show")
+    public ResponseEntity<ResponseDTO<Page<ShowListResponse>>> getArtistShow(@PathVariable("id") Long artistId, Pageable pageable) {
+
+        Page<ShowListResponse> showListResponses = artistService.getArtistShow(artistId, pageable);
+        ResponseDTO<Page<ShowListResponse>> responseDTO = new ResponseDTO<>(true, Optional.of(showListResponses));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
     }

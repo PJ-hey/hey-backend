@@ -34,4 +34,5 @@ public class ShowArtist extends CommonModel {
         this.artist = artist;
     }
 
+
 }
