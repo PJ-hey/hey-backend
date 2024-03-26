@@ -153,7 +153,7 @@ public class UserFollowServiceTest {
     }
 
     @Test
-    void followShow_artistNotFound() {
+    void followArtist_artistNotFound() {
 
         CreateUserRequest createUserRequest = new CreateUserRequest("123@naver.com", "12345678", "test", "1111111111", "test");
         User user = new User(createUserRequest);

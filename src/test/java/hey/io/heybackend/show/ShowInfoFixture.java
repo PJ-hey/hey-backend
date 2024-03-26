@@ -138,4 +138,23 @@ public class ShowInfoFixture {
                 .build();
         return response;
     }
+
+    public static ShowArtist getShowArtistInfo(Show show, Artist artist) {
+        ShowArtist showArtist = ShowArtist.builder()
+                .show(show)
+                .artist(artist)
+                .build();
+
+        return showArtist;
+    }
+
+    public static ShowArtistResponse getShowArtistResponseInfo() {
+        ShowArtistResponse response = ShowArtistResponse.builder()
+                .id(1L)
+                .name("artist1")
+                .profileImage("image1")
+                .build();
+
+        return response;
+    }
 }

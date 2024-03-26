@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -90,6 +91,32 @@ public class ArtistControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/artist/1")
                 .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    @WithMockUser
+    void getAlbum() throws Exception {
+
+        when(artistService.getAlbums(any(), any())).thenReturn(Page.empty());
+
+        mockMvc.perform(get("/artist/1/album")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    @WithMockUser
+    void getArtistShow() throws Exception {
+
+        when(artistService.getArtistShow(any(), any())).thenReturn(Page.empty());
+
+        mockMvc.perform(get("/artist/1/show")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk());
 
     }

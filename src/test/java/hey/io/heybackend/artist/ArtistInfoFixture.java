@@ -82,4 +82,15 @@ public class ArtistInfoFixture {
         return response;
     }
 
+    public static Album getAlbumInfo() {
+        Album response =Album.builder()
+                .coverImg("image2.jpg")
+                .url("carti.com")
+                .title("carti")
+                .releaseDate(LocalDateTime.of(2024, 4, 1, 19, 0))
+                .build();
+
+        return response;
+    }
+
 }

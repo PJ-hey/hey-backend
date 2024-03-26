@@ -24,6 +24,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -54,8 +55,12 @@ public class ShowServiceTest {
     void getShow_success() {
 
         Pageable pageable = mock(Pageable.class);
-        when(showRepository.findByIsConfirmedTrue(pageable)).thenReturn(Page.empty());
-        assertDoesNotThrow(() -> showService.getShow(pageable));
+        String type = "concert";
+        String genre = "hiphop";
+
+
+        when(showRepository.getList(eq(pageable), eq(type), eq(genre))).thenReturn(Page.empty());
+        assertDoesNotThrow(() -> showService.getShow(pageable, type, genre));
 
     }
 
@@ -95,6 +100,16 @@ public class ShowServiceTest {
         Show show = ShowInfoFixture.getShowInfo();
         when(showRepository.findById(show.getId())).thenReturn(Optional.empty());
         CustomException exception = assertThrows(CustomException.class, () -> showService.deleteShow(show.getId()));
+        assertEquals(ErrorCode.SHOW_NOT_FOUND, exception.getErrorCode());
+
+    }
+
+    @Test
+    void getShowArtist_showNotFound() {
+
+        Show show = ShowInfoFixture.getShowInfo();
+        when(showRepository.findById(show.getId())).thenReturn(Optional.empty());
+        CustomException exception = assertThrows(CustomException.class, () -> showService.getShowArtist(show.getId()));
         assertEquals(ErrorCode.SHOW_NOT_FOUND, exception.getErrorCode());
 
     }
