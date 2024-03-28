@@ -32,9 +32,9 @@ public class Artist extends CommonModel {
 
     @Builder.Default
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Album> albums = new ArrayList<>();
 
-    //    followed_users
 
 
     public void addAlbum(List<Album> albums) {
@@ -51,6 +51,5 @@ public class Artist extends CommonModel {
         this.debutDate = request.getDebutDate();
 
     }
-
 
 }
