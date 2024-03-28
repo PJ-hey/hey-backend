@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Table(name = "\"album\"")
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"artist", "createdAt", "updatedAt"})
 public class Album extends CommonModel {
 
     @ManyToOne(fetch = FetchType.LAZY)

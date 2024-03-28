@@ -13,6 +13,12 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import hey.io.heybackend.artist.dtos.response.ArtistResponse;
+import hey.io.heybackend.artist.entities.Album;
+import hey.io.heybackend.artist.entities.Artist;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
 
 public class ArtistInfoFixture {
 
@@ -28,6 +34,7 @@ public class ArtistInfoFixture {
 
         return artist;
     }
+
 
 
     public static CreateArtistRequest getCreateRequestInfo() {
@@ -64,6 +71,7 @@ public class ArtistInfoFixture {
                 .albums(request.getAlbums().stream()
                         .map(album -> new AlbumResponse(album))
                         .collect(Collectors.toList()))
+                .albums(Arrays.asList(Album.of("image2.jpg", "carti.com", "carti", LocalDateTime.of(2024, 4, 1, 19, 0)), Album.of("image3.jpg", "carti2.com", "carti2", LocalDateTime.of(2024, 4, 1, 19, 0))))
                 .build();
 
         return response;
@@ -92,5 +100,6 @@ public class ArtistInfoFixture {
 
         return response;
     }
+
 
 }

@@ -12,4 +12,7 @@ public interface ArtistRepository extends JpaRepository<Artist, Long>, ArtistRep
 
     Optional<Artist> findByName(String name);
 
+
+@Repository
+public interface ArtistRepository extends JpaRepository<Artist, Long> {
 }

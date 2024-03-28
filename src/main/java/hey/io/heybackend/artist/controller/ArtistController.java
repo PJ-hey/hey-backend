@@ -11,11 +11,16 @@ import hey.io.heybackend.show.dtos.response.ShowListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import hey.io.heybackend.artist.dtos.response.ArtistResponse;
+import hey.io.heybackend.artist.service.ArtistService;
+import hey.io.heybackend.common.response.ResponseDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 import java.util.Optional;
 
 @RestController
@@ -79,4 +84,5 @@ public class ArtistController {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
     }
+
 }

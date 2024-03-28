@@ -17,6 +17,13 @@ import hey.io.heybackend.show.repository.ShowRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import hey.io.heybackend.artist.dtos.response.ArtistResponse;
+import hey.io.heybackend.artist.entities.Album;
+import hey.io.heybackend.artist.entities.Artist;
+import hey.io.heybackend.artist.repository.ArtistRepository;
+import hey.io.heybackend.common.exceptions.CustomException;
+import hey.io.heybackend.common.exceptions.ErrorCode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +39,7 @@ public class ArtistService {
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
     private final ShowRepository showRepository;
+
 
     @Transactional
     public ArtistResponse createArtist(CreateArtistRequest request) {
@@ -99,5 +107,6 @@ public class ArtistService {
 
         return shows.map(ShowListResponse::new);
     }
+
 
 }

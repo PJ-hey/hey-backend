@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -25,6 +26,7 @@ public class ArtistResponse {
     private LocalDateTime debutDate;
 
     private List<AlbumResponse> albums = new ArrayList<>();
+    private List<Album> albums = new ArrayList<>();
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -40,6 +42,10 @@ public class ArtistResponse {
                 .collect(Collectors.toList());
         this.createdAt = artist.getCreatedAt();
         this.updatedAt = artist.getUpdatedAt();
+        this.albums = artist.getAlbums();
+        this.createdAt = artist.getCreatedAt();
+        this.updatedAt = artist.getUpdatedAt();
+
     }
 
 

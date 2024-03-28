@@ -10,6 +10,9 @@ import hey.io.heybackend.common.exceptions.CustomException;
 import hey.io.heybackend.common.exceptions.ErrorCode;
 import hey.io.heybackend.show.repository.ShowArtistRepository;
 import hey.io.heybackend.show.repository.ShowRepository;
+import hey.io.heybackend.artist.repository.ArtistRepository;
+import hey.io.heybackend.common.exceptions.CustomException;
+import hey.io.heybackend.common.exceptions.ErrorCode;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,11 +20,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -39,6 +44,7 @@ public class ArtistServiceTest {
 
     @MockBean
     private ShowRepository showRepository;
+
 
 
     @Test
@@ -125,4 +131,5 @@ public class ArtistServiceTest {
         assertDoesNotThrow(() -> artistService.getArtistShow(artist.getId(), pageable));
 
     }
+
 }
