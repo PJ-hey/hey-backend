@@ -11,7 +11,6 @@ import lombok.*;
 @Table(name = "ticket_seller")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@JsonIgnoreProperties({"show", "createdAt", "updatedAt"})
 public class TicketSeller extends CommonModel {
 
     private String name;

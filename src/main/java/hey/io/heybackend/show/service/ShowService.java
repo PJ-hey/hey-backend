@@ -1,12 +1,17 @@
 package hey.io.heybackend.show.service;
 
+import hey.io.heybackend.artist.entities.Artist;
+import hey.io.heybackend.artist.repository.ArtistRepository;
 import hey.io.heybackend.common.exceptions.CustomException;
 import hey.io.heybackend.common.exceptions.ErrorCode;
 import hey.io.heybackend.show.dtos.request.CreateShowRequest;
 import hey.io.heybackend.show.dtos.request.UpdateShowRequest;
+import hey.io.heybackend.show.dtos.response.ShowArtistResponse;
+import hey.io.heybackend.show.dtos.response.ShowListResponse;
 import hey.io.heybackend.show.dtos.response.ShowResponse;
 import hey.io.heybackend.show.entities.PriceInfo;
 import hey.io.heybackend.show.entities.Show;
+import hey.io.heybackend.show.entities.ShowArtist;
 import hey.io.heybackend.show.entities.TicketSeller;
 import hey.io.heybackend.show.repository.ShowRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +31,7 @@ import java.util.stream.Collectors;
 public class ShowService {
 
     private final ShowRepository showRepository;
+    private final ArtistRepository artistRepository;
 
     @Transactional
     public ShowResponse createShow(CreateShowRequest request) {
@@ -57,17 +63,29 @@ public class ShowService {
         show.addPriceInfo(priceInfos);
         show.addTicketSeller(ticketSellers);
 
+
+        List<String> artistNames = request.getArtistNames();
+
+        for(String artistName : artistNames) {
+            Artist artist = artistRepository.findByName(artistName)
+                    .orElseThrow(() -> new CustomException(ErrorCode.ARTIST_NOT_FOUND));
+
+            ShowArtist showArtist = ShowArtist.of(show, artist);
+            show.addShowArtist(showArtist);
+
+        }
+
         Show savedShow = showRepository.save(show);
+
 
         return new ShowResponse(savedShow);
     }
 
-    public Page<ShowResponse> getShow(Pageable pageable) {
+    public Page<ShowListResponse> getShow(Pageable pageable, String type, String genre) {
 
-        Page<Show> show = showRepository.findByIsConfirmedTrue(pageable);
+        Page<Show> show = showRepository.getList(pageable, type, genre);
 
-        return show.map(ShowResponse::new);
-
+        return show.map(ShowListResponse::new);
     }
 
     public ShowResponse getShowInfo(Long showId) {
@@ -98,5 +116,17 @@ public class ShowService {
 
         showRepository.delete(show);
     }
+
+    public List<ShowArtistResponse> getShowArtist(Long showId) {
+
+        Show show = showRepository.findById(showId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SHOW_NOT_FOUND));
+
+        return show.getArtists().stream()
+                .map(showArtist -> ShowArtistResponse.fromArtist(showArtist.getArtist()))
+                .collect(Collectors.toList());
+    }
+
+
 
 }

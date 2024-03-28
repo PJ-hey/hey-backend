@@ -3,6 +3,8 @@ package hey.io.heybackend.show.controller;
 import hey.io.heybackend.common.response.ResponseDTO;
 import hey.io.heybackend.show.dtos.request.CreateShowRequest;
 import hey.io.heybackend.show.dtos.request.UpdateShowRequest;
+import hey.io.heybackend.show.dtos.response.ShowArtistResponse;
+import hey.io.heybackend.show.dtos.response.ShowListResponse;
 import hey.io.heybackend.show.dtos.response.ShowResponse;
 import hey.io.heybackend.show.service.ShowService;
 import lombok.RequiredArgsConstructor;
@@ -12,16 +14,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/show")
+@RequestMapping
 public class ShowController {
 
     private final ShowService showService;
 
-    @PostMapping
+    @PostMapping("/show")
     public ResponseEntity<ResponseDTO<ShowResponse>> createShow(@RequestBody CreateShowRequest request) {
 
         ShowResponse showResponse = showService.createShow(request);
@@ -31,17 +34,19 @@ public class ShowController {
 
     }
 
-    @GetMapping
-    public ResponseEntity<ResponseDTO<Page<ShowResponse>>> getShow(Pageable pageable) {
+    @GetMapping("/show")
+    public ResponseEntity<ResponseDTO<Page<ShowListResponse>>> getShow(Pageable pageable,
+                                                                       @RequestParam(value = "type", required = false) String type,
+                                                                       @RequestParam(value = "genre", required = false) String genre) {
 
-        Page<ShowResponse> showResponse = showService.getShow(pageable);
-        ResponseDTO<Page<ShowResponse>> responseDTO = new ResponseDTO<>(true, Optional.of(showResponse));
+        Page<ShowListResponse> showListResponse = showService.getShow(pageable, type, genre);
+        ResponseDTO<Page<ShowListResponse>> responseDTO = new ResponseDTO<>(true, Optional.of(showListResponse));
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/show/{id}")
     public ResponseEntity<ResponseDTO<ShowResponse>> getShowInfo(@PathVariable("id") Long showId) {
 
         ShowResponse showResponse = showService.getShowInfo(showId);
@@ -50,7 +55,7 @@ public class ShowController {
 
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/show/{id}")
     public ResponseEntity<ResponseDTO<ShowResponse>> updateShow(@PathVariable("id") Long showId, @RequestBody UpdateShowRequest request) {
 
         ShowResponse showResponse = showService.updateShow(showId, request);
@@ -59,7 +64,7 @@ public class ShowController {
 
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/show/{id}")
     public ResponseEntity<ResponseDTO<Void>> deleteShow(@PathVariable("id") Long showId) {
 
         showService.deleteShow(showId);
@@ -67,5 +72,15 @@ public class ShowController {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
     }
+
+    @GetMapping("/show/{id}/artist")
+    public ResponseEntity<ResponseDTO<List<ShowArtistResponse>>> getShowArtist(@PathVariable("id") Long showId) {
+
+        List<ShowArtistResponse> showArtistResponse = showService.getShowArtist(showId);
+        ResponseDTO<List<ShowArtistResponse>> responseDTO = new ResponseDTO<>(true, Optional.of(showArtistResponse));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+
+    }
+
 
 }

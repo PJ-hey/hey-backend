@@ -30,7 +30,11 @@ public class User extends CommonModel {
 
     @Builder.Default
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<UserFollowShow> userFollows = new ArrayList<>();
+    private List<UserFollowShow> userFollowShows = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserFollowArtist> userFollowArtists = new ArrayList<>();
 
     public User(CreateUserRequest request) {
         this.email = request.getEmail();

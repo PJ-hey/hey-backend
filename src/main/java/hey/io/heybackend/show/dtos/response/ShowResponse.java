@@ -1,8 +1,6 @@
 package hey.io.heybackend.show.dtos.response;
 
-import hey.io.heybackend.show.entities.PriceInfo;
 import hey.io.heybackend.show.entities.Show;
-import hey.io.heybackend.show.entities.TicketSeller;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -21,9 +20,10 @@ public class ShowResponse {
 
     private Long id;
     private String name;
-    private List<PriceInfo> priceInfos = new ArrayList<>();
-    private List<TicketSeller> ticketSellers = new ArrayList<>();
+    private List<PriceInfoResponse> priceInfos = new ArrayList<>();
+    private List<TicketSellerResponse> ticketSellers = new ArrayList<>();
     private String urlId;
+    private List<ShowArtistResponse> artists = new ArrayList<>();
     private LocalDateTime ticketOpenTime;
     private LocalDateTime date;
     private Integer strictedAge;
@@ -40,9 +40,16 @@ public class ShowResponse {
     public ShowResponse(Show show) {
         this.id = show.getId();
         this.name = show.getName();
-        this.priceInfos = show.getPriceInfos();
-        this.ticketSellers = show.getTicketSellers();
+        this.priceInfos = show.getPriceInfos().stream()
+                .map(priceInfo -> new PriceInfoResponse(priceInfo))
+                .collect(Collectors.toList());
+        this.ticketSellers = show.getTicketSellers().stream()
+                .map(ticketSeller -> new TicketSellerResponse(ticketSeller))
+                .collect(Collectors.toList());
         this.urlId = show.getUrlId();
+        this.artists = show.getArtists().stream()
+                .map(showArtist -> ShowArtistResponse.fromArtist(showArtist.getArtist()))
+                .collect(Collectors.toList());
         this.ticketOpenTime = show.getTicketOpenTime();
         this.date = show.getDate();
         this.strictedAge = show.getStrictedAge();
@@ -60,4 +67,5 @@ public class ShowResponse {
         this.createdAt = show.getCreatedAt();
         this.updatedAt = show.getUpdatedAt();
     }
+
 }

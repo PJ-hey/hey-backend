@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Getter
 @Builder
@@ -23,6 +25,7 @@ public class ArtistResponse {
     private String genre;
     private LocalDateTime debutDate;
 
+    private List<AlbumResponse> albums = new ArrayList<>();
     private List<Album> albums = new ArrayList<>();
 
     private LocalDateTime createdAt;
@@ -34,6 +37,11 @@ public class ArtistResponse {
         this.profileImage = artist.getProfileImage();
         this.genre = artist.getGenre();
         this.debutDate = artist.getDebutDate();
+        this.albums = artist.getAlbums().stream()
+                .map(album -> new AlbumResponse(album))
+                .collect(Collectors.toList());
+        this.createdAt = artist.getCreatedAt();
+        this.updatedAt = artist.getUpdatedAt();
         this.albums = artist.getAlbums();
         this.createdAt = artist.getCreatedAt();
         this.updatedAt = artist.getUpdatedAt();

@@ -1,11 +1,15 @@
 package hey.io.heybackend.show.service;
 
+import hey.io.heybackend.artist.ArtistInfoFixture;
+import hey.io.heybackend.artist.entities.Artist;
+import hey.io.heybackend.artist.repository.ArtistRepository;
 import hey.io.heybackend.common.exceptions.CustomException;
 import hey.io.heybackend.common.exceptions.ErrorCode;
 import hey.io.heybackend.show.ShowInfoFixture;
 import hey.io.heybackend.show.dtos.request.CreateShowRequest;
 import hey.io.heybackend.show.dtos.request.UpdateShowRequest;
 import hey.io.heybackend.show.entities.Show;
+import hey.io.heybackend.show.entities.ShowArtist;
 import hey.io.heybackend.show.repository.ShowRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -32,11 +37,16 @@ public class ShowServiceTest {
     @MockBean
     private ShowRepository showRepository;
 
+    @MockBean
+    private ArtistRepository artistRepository;
+
     @Test
     void createShow_success() {
 
         CreateShowRequest request = ShowInfoFixture.getCreateRequestInfo();
+        Artist artist = ArtistInfoFixture.getArtistInfo();
         when(showRepository.save(any())).thenReturn(mock(Show.class));
+        when(artistRepository.findByName(any())).thenReturn(Optional.of(artist));
         assertDoesNotThrow(() -> showService.createShow(request));
 
     }
@@ -45,8 +55,12 @@ public class ShowServiceTest {
     void getShow_success() {
 
         Pageable pageable = mock(Pageable.class);
-        when(showRepository.findByIsConfirmedTrue(pageable)).thenReturn(Page.empty());
-        assertDoesNotThrow(() -> showService.getShow(pageable));
+        String type = "concert";
+        String genre = "hiphop";
+
+
+        when(showRepository.getList(eq(pageable), eq(type), eq(genre))).thenReturn(Page.empty());
+        assertDoesNotThrow(() -> showService.getShow(pageable, type, genre));
 
     }
 
@@ -86,6 +100,16 @@ public class ShowServiceTest {
         Show show = ShowInfoFixture.getShowInfo();
         when(showRepository.findById(show.getId())).thenReturn(Optional.empty());
         CustomException exception = assertThrows(CustomException.class, () -> showService.deleteShow(show.getId()));
+        assertEquals(ErrorCode.SHOW_NOT_FOUND, exception.getErrorCode());
+
+    }
+
+    @Test
+    void getShowArtist_showNotFound() {
+
+        Show show = ShowInfoFixture.getShowInfo();
+        when(showRepository.findById(show.getId())).thenReturn(Optional.empty());
+        CustomException exception = assertThrows(CustomException.class, () -> showService.getShowArtist(show.getId()));
         assertEquals(ErrorCode.SHOW_NOT_FOUND, exception.getErrorCode());
 
     }

@@ -1,10 +1,15 @@
 package hey.io.heybackend.show.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hey.io.heybackend.artist.ArtistInfoFixture;
+import hey.io.heybackend.artist.entities.Artist;
 import hey.io.heybackend.show.ShowInfoFixture;
 import hey.io.heybackend.show.dtos.request.CreateShowRequest;
 import hey.io.heybackend.show.dtos.request.UpdateShowRequest;
+import hey.io.heybackend.show.dtos.response.ShowArtistResponse;
 import hey.io.heybackend.show.dtos.response.ShowResponse;
+import hey.io.heybackend.show.entities.Show;
+import hey.io.heybackend.show.entities.ShowArtist;
 import hey.io.heybackend.show.service.ShowService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +22,10 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
@@ -56,7 +65,7 @@ public class ShowControllerTest {
     @WithAnonymousUser
     void getShow() throws Exception {
 
-        when(showService.getShow(any())).thenReturn(Page.empty());
+        when(showService.getShow(any(), any(), any())).thenReturn(Page.empty());
 
         mockMvc.perform(get("/show")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -101,6 +110,20 @@ public class ShowControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/show/1")
                         .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    void getShowArtist() throws Exception {
+
+        List<ShowArtistResponse> response = Arrays.asList(ShowInfoFixture.getShowArtistResponseInfo());
+
+        when(showService.getShowArtist(eq(1L))).thenReturn(response);
+
+        mockMvc.perform(get("/show/1/artist")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk());
     }
 }
