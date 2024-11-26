@@ -1,7 +1,7 @@
 package hey.io.heybackend.common.exception;
 
-import hey.io.heybackend.common.response.ApiResponse;
-import hey.io.heybackend.common.response.ApiResponse.ValidationError;
+import hey.io.heybackend.common.dto.ApiResponse;
+import hey.io.heybackend.common.dto.ApiResponse.ValidationError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;

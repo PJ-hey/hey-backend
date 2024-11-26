@@ -1,4 +1,4 @@
-package hey.io.heybackend.common.response;
+package hey.io.heybackend.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import hey.io.heybackend.common.exception.ErrorCode;

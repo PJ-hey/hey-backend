@@ -1,6 +1,5 @@
 package hey.io.heybackend.domain.system.dto;
 
-import hey.io.heybackend.domain.system.entity.Token;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;

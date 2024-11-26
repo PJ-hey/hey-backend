@@ -1,7 +1,7 @@
 package hey.io.heybackend.domain.oauth2.handler;
 
 import hey.io.heybackend.common.exception.ErrorCode;
-import hey.io.heybackend.common.response.ApiResponse;
+import hey.io.heybackend.common.dto.ApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

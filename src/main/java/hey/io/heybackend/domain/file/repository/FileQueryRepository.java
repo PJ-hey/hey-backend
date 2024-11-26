@@ -1,16 +1,26 @@
 package hey.io.heybackend.domain.file.repository;
 
-import hey.io.heybackend.domain.file.entity.File;
+import hey.io.heybackend.domain.file.dto.FileDTO;
 import hey.io.heybackend.domain.file.enums.EntityType;
-import hey.io.heybackend.domain.file.enums.FileCategory;
-
 import java.util.List;
 
 public interface FileQueryRepository {
 
-    List<File> findFilesByEntityAndId(Long entityId, EntityType entityType, FileCategory fileCategory);
+    /**
+     * <p>엔티티별 썸네일 목록</p>
+     *
+     * @param entityType 엔티티 유형
+     * @param entityIds  엔티티 ID 목록
+     * @return 썸네일 목록
+     */
+    List<FileDTO> selectThumbnailFileList(EntityType entityType, List<Long> entityIds);
 
-    List<File> findFilesByEntityAndIds(List<Long> entityIds, EntityType entityType, FileCategory fileCategory);
-
-
+    /**
+     * <p>특정 엔티티 상세 파일 목록</p>
+     *
+     * @param entityType 엔티티 유형
+     * @param entityId   엔티티 ID
+     * @return 상세 파일 목록
+     */
+    List<FileDTO> selectDetailFileList(EntityType entityType, Long entityId);
 }

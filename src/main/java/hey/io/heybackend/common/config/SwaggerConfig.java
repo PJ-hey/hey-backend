@@ -134,7 +134,7 @@ public class SwaggerConfig {
      */
     private Example getSwaggerExample(ErrorCode errorCode) {
         Example example = new Example();
-        example.setValue(hey.io.heybackend.common.response.ApiResponse.failure(errorCode));
+        example.setValue(hey.io.heybackend.common.dto.ApiResponse.failure(errorCode));
 
         return example;
     }

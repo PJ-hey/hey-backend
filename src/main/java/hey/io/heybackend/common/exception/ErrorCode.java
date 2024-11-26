@@ -1,11 +1,10 @@
 package hey.io.heybackend.common.exception;
 
+import java.util.Optional;
+import java.util.function.Predicate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-
-import java.util.Optional;
-import java.util.function.Predicate;
 
 @Getter
 @RequiredArgsConstructor
@@ -31,7 +30,6 @@ public enum ErrorCode {
     AUTH_INFO_NOT_FOUND(HttpStatus.UNAUTHORIZED, "Security Context에 인증 정보가 없습니다."),
     FORBIDDEN_CLIENT(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
 
-
     // DB
     DATABASE_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "DB 서버 연동에 오류가 발생했습니다."),
 
@@ -52,22 +50,17 @@ public enum ErrorCode {
     JWT_REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "Refresh 토큰 정보를 찾을 수 없습니다."),
     AUTH_NOT_FOUND(HttpStatus.NOT_FOUND, "권한 정보를 찾을 수 없습니다."),
 
-
     // Unsupported
     UNSUPPORTED_LOGIN_TYPE(HttpStatus.BAD_REQUEST, "지원하지 않는 로그인 타입입니다."),
-
 
     // Member
     MEMBER_ALREADY_EXIST(HttpStatus.CONFLICT, "이미 가입된 회원입니다."),
     INCORRECT_USER(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
     INVALID_MEMBER(HttpStatus.UNAUTHORIZED, "유효하지 않은 회원입니다."),
 
-
     // Artist
     INVALID_ARTIST_ID(HttpStatus.BAD_REQUEST, "아티스트 ID 입력 값이 올바르지 않습니다."),
     TOO_MANY_ARTIST_ID(HttpStatus.BAD_REQUEST, "아티스트 ID는 최대 50개까지 입력 가능합니다."),
-
-
     ;
 
     private final HttpStatus httpStatus;

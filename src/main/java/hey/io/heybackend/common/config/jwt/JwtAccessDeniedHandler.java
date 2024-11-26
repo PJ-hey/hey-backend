@@ -2,7 +2,7 @@ package hey.io.heybackend.common.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hey.io.heybackend.common.exception.ErrorCode;
-import hey.io.heybackend.common.response.ApiResponse;
+import hey.io.heybackend.common.dto.ApiResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

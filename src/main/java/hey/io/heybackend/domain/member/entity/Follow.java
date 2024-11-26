@@ -23,7 +23,8 @@ public class Follow {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(name = "follow_type")
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private FollowType followType;
 
     @Column(name = "follow_target_id")
