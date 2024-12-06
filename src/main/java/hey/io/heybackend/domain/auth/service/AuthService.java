@@ -1,14 +1,10 @@
 package hey.io.heybackend.domain.auth.service;
 
-import hey.io.heybackend.common.exception.ErrorCode;
-import hey.io.heybackend.common.exception.notfound.EntityNotFoundException;
 import hey.io.heybackend.domain.auth.dto.AuthDto;
 import hey.io.heybackend.domain.auth.entity.Auth;
-import hey.io.heybackend.domain.auth.entity.UserAuth;
-import hey.io.heybackend.domain.auth.enums.AuthType;
+import hey.io.heybackend.domain.user.entity.UserAuth;
 import hey.io.heybackend.domain.auth.repository.AuthRepository;
-import hey.io.heybackend.domain.auth.repository.UserAuthRepository;
-import hey.io.heybackend.domain.member.entity.Member;
+import hey.io.heybackend.domain.user.repository.UserAuthRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

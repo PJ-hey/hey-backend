@@ -1,13 +1,11 @@
 package hey.io.heybackend.domain.member.enums;
 
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
-import hey.io.heybackend.domain.oauth.dto.SocialUserInfo;
+import hey.io.heybackend.domain.login.dto.SocialUserInfo;
 import hey.io.heybackend.common.mapper.EnumMapperType;
-import hey.io.heybackend.domain.oauth.mapper.AppleUserInfoMapper;
-import hey.io.heybackend.domain.oauth.mapper.GoogleUserInfoMapper;
-import hey.io.heybackend.domain.oauth.mapper.KakaoUserInfoMapper;
-import hey.io.heybackend.domain.oauth.mapper.UserInfoMapper;
+import hey.io.heybackend.domain.login.mapper.AppleUserInfoMapper;
+import hey.io.heybackend.domain.login.mapper.GoogleUserInfoMapper;
+import hey.io.heybackend.domain.login.mapper.KakaoUserInfoMapper;
+import hey.io.heybackend.domain.login.mapper.UserInfoMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

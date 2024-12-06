@@ -69,7 +69,7 @@ public class Member extends BaseTimeEntity {
                 .email(email)
                 .name(name != null ? name : nickname)
                 .nickname(nickname)
-                .memberStatus(MemberStatus.LOCKED)
+                .memberStatus(MemberStatus.INIT)
                 .optionalTermsAgreed(false)
                 .build();
     }
@@ -98,7 +98,7 @@ public class Member extends BaseTimeEntity {
         if (this.optionalTermsAgreed) { // 약관 동의 정보가 true일 경우
             this.memberStatus = MemberStatus.ACTIVE;
         } else { // 약관 동의 정보가 false일 경우
-            this.memberStatus = MemberStatus.LOCKED;
+            this.memberStatus = MemberStatus.INIT;
         }
     }
 }

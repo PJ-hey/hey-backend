@@ -2,10 +2,10 @@ package hey.io.heybackend.common.jwt;
 
 import hey.io.heybackend.common.exception.ErrorCode;
 import hey.io.heybackend.common.exception.unauthorized.UnAuthorizedException;
-import hey.io.heybackend.common.jwt.dto.TokenDto;
-import hey.io.heybackend.domain.auth.dto.AuthenticatedMember;
+import hey.io.heybackend.domain.user.dto.TokenDto;
+import hey.io.heybackend.domain.member.dto.AuthenticatedMember;
 import hey.io.heybackend.domain.member.entity.Member;
-import hey.io.heybackend.domain.auth.service.CustomUserDetailService;
+import hey.io.heybackend.domain.user.service.CustomUserDetailService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

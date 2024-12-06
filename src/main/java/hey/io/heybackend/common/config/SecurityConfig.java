@@ -1,11 +1,11 @@
 package hey.io.heybackend.common.config;
 
-import hey.io.heybackend.common.config.filter.JwtAuthenticationProcessingFilter;
+import hey.io.heybackend.common.jwt.JwtAuthenticationEntryPoint;
+import hey.io.heybackend.common.jwt.JwtAuthenticationProcessingFilter;
 import hey.io.heybackend.common.jwt.JwtAccessDeniedHandler;
 import hey.io.heybackend.common.jwt.JwtTokenProvider;
-import hey.io.heybackend.common.jwt.service.TokenService;
-import hey.io.heybackend.domain.member.service.MemberService;
-import hey.io.heybackend.domain.oauth.service.OAuthLoginService;
+import hey.io.heybackend.domain.user.service.TokenService;
+import hey.io.heybackend.domain.login.service.OAuthLoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -71,7 +71,7 @@ public class SecurityConfig {
 
                 // 예외 처리 적용
                 .exceptionHandling(exceptionHandling -> {
-//                    exceptionHandling.authenticationEntryPoint(new JwtAuthenticationEntryPoint());
+                    exceptionHandling.authenticationEntryPoint(new JwtAuthenticationEntryPoint());
                     exceptionHandling.accessDeniedHandler(new JwtAccessDeniedHandler());
                 })
 
