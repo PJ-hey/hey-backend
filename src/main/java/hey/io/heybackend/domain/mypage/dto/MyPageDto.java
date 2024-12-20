@@ -3,8 +3,6 @@ package hey.io.heybackend.domain.mypage.dto;
 import com.querydsl.core.annotations.QueryProjection;
 import hey.io.heybackend.domain.member.enums.InterestCategory;
 import hey.io.heybackend.domain.member.enums.InterestCode;
-import hey.io.heybackend.domain.performance.enums.PerformanceGenre;
-import hey.io.heybackend.domain.performance.enums.PerformanceType;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,8 +33,10 @@ public class MyPageDto {
 
         @AssertTrue
         public boolean isValidInterestCode() {
-            boolean isValidType = type.stream().allMatch(code -> code.getInterestCategory() == InterestCategory.TYPE);
-            boolean isValidGenre = genre.stream().allMatch(code -> code.getInterestCategory() == InterestCategory.GENRE);
+            boolean isValidType = type.stream()
+                .allMatch(code -> code.getInterestCategory() == InterestCategory.TYPE);
+            boolean isValidGenre = genre.stream()
+                .allMatch(code -> code.getInterestCategory() == InterestCategory.GENRE);
             return isValidType && isValidGenre;
         }
     }

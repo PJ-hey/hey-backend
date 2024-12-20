@@ -27,8 +27,8 @@ public class MemberQueryRepositoryImpl extends Querydsl5RepositorySupport implem
     /**
      * <p>회원 정보</p>
      *
-     * @param providerUid
-     * @return 회원 정보
+     * @param providerUid 소셜 ID
+     * @return 회원
      */
     @Override
     public Optional<Member> selectMemberByProviderUid(String providerUid) {
@@ -43,8 +43,8 @@ public class MemberQueryRepositoryImpl extends Querydsl5RepositorySupport implem
     /**
      * <p>회원 정보</p>
      *
-     * @param refreshToken refresh 토큰
-     * @return 회원 정보
+     * @param refreshToken 리프레시 토큰
+     * @return 회원
      */
     @Override
     public Optional<Member> selectMemberByRefreshToken(String refreshToken) {
@@ -61,7 +61,7 @@ public class MemberQueryRepositoryImpl extends Querydsl5RepositorySupport implem
      * <p>회원 상세</p>
      *
      * @param memberId 회원 ID
-     * @return 회원 상세 정보
+     * @return 회원 상세 정보 + 관심 정보
      */
     @Override
     public MemberDetailResponse selectMemberDetail(Long memberId) {
@@ -89,16 +89,16 @@ public class MemberQueryRepositoryImpl extends Querydsl5RepositorySupport implem
     }
 
     /**
-     * <p>회원 관심 목록</p>
+     * <p>관심 정보 목록</p>
      *
      * @param memberId 회원 ID
-     * @return 회원 관심 목록 정보
+     * @return 관심 정보 목록
      */
     @Override
     public List<InterestCode> selectInterestCodeList(Long memberId) {
         return select(
             memberInterest.interestCode
-            )
+        )
             .from(memberInterest)
             .where(memberInterest.member.memberId.eq(memberId))
             .fetch();

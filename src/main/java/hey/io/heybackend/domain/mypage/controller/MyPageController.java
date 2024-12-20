@@ -31,10 +31,10 @@ public class MyPageController {
     private final MyPageService myPageService;
 
     /**
-     * <p>회원 정보 조회</p>
+     * <p>회원 상세</p>
      *
      * @param authenticatedMember 인증 회원 정보
-     * @return 회원 정보
+     * @return 회원 상세 정보
      */
     @GetMapping("/mypage/info")
     @ApiErrorCode(ErrorCode.MEMBER_NOT_FOUND)

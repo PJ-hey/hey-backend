@@ -23,11 +23,12 @@ public class AuthenticatedMember implements UserDetails {
     private Long memberId; // 사용자 ID
     private Set<GrantedAuthority> authorities; // 권한 목록
 
-    public static AuthenticatedMember of(Member member, Collection<? extends GrantedAuthority> authorities) {
+    public static AuthenticatedMember of(Member member,
+        Collection<? extends GrantedAuthority> authorities) {
         return AuthenticatedMember.builder()
-                .memberId(member.getMemberId())
-                .authorities(Collections.unmodifiableSet(sortAuthorities(authorities)))
-                .build();
+            .memberId(member.getMemberId())
+            .authorities(Collections.unmodifiableSet(sortAuthorities(authorities)))
+            .build();
     }
 
     @Override
@@ -72,17 +73,17 @@ public class AuthenticatedMember implements UserDetails {
             return false;
         }
         return (this.memberId != null || dto.getMemberId() == null)
-                && (this.memberId == null || this.memberId.equals(dto.getMemberId()));
+            && (this.memberId == null || this.memberId.equals(dto.getMemberId()));
     }
 
     private static SortedSet<GrantedAuthority> sortAuthorities(
-            Collection<? extends GrantedAuthority> authorities) {
+        Collection<? extends GrantedAuthority> authorities) {
         Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
         SortedSet<GrantedAuthority> sortedAuthorities = new TreeSet<>(new AuthorityComparator());
 
         for (GrantedAuthority grantedAuthority : authorities) {
             Assert.notNull(grantedAuthority,
-                    "GrantedAuthority list cannot contain any null elements");
+                "GrantedAuthority list cannot contain any null elements");
             sortedAuthorities.add(grantedAuthority);
         }
 

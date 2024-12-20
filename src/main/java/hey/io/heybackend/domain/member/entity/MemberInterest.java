@@ -41,18 +41,12 @@ public class MemberInterest extends BaseTimeEntity {
     private InterestCode interestCode;
 
     @Builder
-    private MemberInterest(Member member, InterestCategory interestCategory, InterestCode interestCode) {
+    private MemberInterest(Member member, InterestCategory interestCategory,
+        InterestCode interestCode) {
         this.member = member;
         this.interestCategory = interestCategory;
         this.interestCode = interestCode;
     }
 
-    public static MemberInterest of(Member member, InterestCategory interestCategory, InterestCode interestCode) {
-        return MemberInterest.builder()
-                .member(member)
-                .interestCategory(interestCategory)
-                .interestCode(interestCode)
-                .build();
-    }
 
 }

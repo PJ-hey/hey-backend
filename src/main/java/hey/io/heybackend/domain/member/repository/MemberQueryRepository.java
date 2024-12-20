@@ -5,7 +5,6 @@ import hey.io.heybackend.domain.auth.enums.AuthId;
 import hey.io.heybackend.domain.member.entity.Member;
 import hey.io.heybackend.domain.member.enums.InterestCode;
 import hey.io.heybackend.domain.mypage.dto.MyPageDto.MemberDetailResponse;
-import hey.io.heybackend.domain.mypage.dto.MyPageDto.MemberDetailResponse.MemberInterestDto;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,16 +14,16 @@ public interface MemberQueryRepository {
     /**
      * <p>회원 정보</p>
      *
-     * @param providerUid
-     * @return 회원 정보
+     * @param providerUid 소셜 ID
+     * @return 회원
      */
     Optional<Member> selectMemberByProviderUid(String providerUid);
 
     /**
      * <p>회원 정보</p>
      *
-     * @param refreshToken refresh 토큰
-     * @return 회원 정보
+     * @param refreshToken 리프레시 토큰
+     * @return 회원
      */
     Optional<Member> selectMemberByRefreshToken(String refreshToken);
 
@@ -32,7 +31,7 @@ public interface MemberQueryRepository {
      * <p>회원 상세</p>
      *
      * @param memberId 회원 ID
-     * @return 회원 상세 정보
+     * @return 회원 상세 정보 + 관심 정보
      */
     MemberDetailResponse selectMemberDetail(Long memberId);
 
@@ -46,10 +45,10 @@ public interface MemberQueryRepository {
 
 
     /**
-     * <p>회원 관심 목록</p>
+     * <p>관심 정보 목록</p>
      *
      * @param memberId 회원 ID
-     * @return 회원 관심 목록 정보
+     * @return 관심 정보 목록
      */
     List<InterestCode> selectInterestCodeList(Long memberId);
 

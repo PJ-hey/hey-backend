@@ -41,7 +41,8 @@ public class MyPageService {
         }
 
         // 2. 관심 정보 조회
-        List<InterestCode> interestCodeList = memberRepository.selectInterestCodeList(authenticatedMember.getMemberId());
+        List<InterestCode> interestCodeList = memberRepository.selectInterestCodeList(
+            authenticatedMember.getMemberId());
         MemberInterestDto memberInterestDto = MemberInterestDto.of(interestCodeList);
 
         return MemberDetailResponse.of(memberDetail, memberInterestDto);
@@ -50,7 +51,7 @@ public class MyPageService {
     /**
      * <p>닉네임 중복 확인</p>
      *
-     * @param nickname
+     * @param nickname 닉네임
      * @return 닉네임 중복 여부
      */
     public Boolean existsNickname(String nickname) {

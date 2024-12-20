@@ -55,7 +55,7 @@ public class Member extends BaseTimeEntity {
 
     @Builder
     public Member(String email, String name, String nickname,
-                   MemberStatus memberStatus, boolean basicTermsAgreed, LocalDateTime accessedAt) {
+        MemberStatus memberStatus, boolean basicTermsAgreed, LocalDateTime accessedAt) {
         this.email = email;
         this.name = (name != null) ? name : nickname;
         this.nickname = nickname;
@@ -65,7 +65,8 @@ public class Member extends BaseTimeEntity {
     }
 
     // 회원 정보 업데이트
-    public Member updateMember(String email, String name, MemberStatus memberStatus, Boolean basicTermsAgreed, LocalDateTime accessedAt) {
+    public Member updateMember(String email, String name, MemberStatus memberStatus,
+        Boolean basicTermsAgreed, LocalDateTime accessedAt) {
         this.email = email;
         this.name = name;
         this.memberStatus = memberStatus;
