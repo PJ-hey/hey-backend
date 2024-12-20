@@ -3,18 +3,15 @@ package hey.io.heybackend.domain.mypage.service;
 import hey.io.heybackend.common.exception.ErrorCode;
 import hey.io.heybackend.common.exception.notfound.EntityNotFoundException;
 import hey.io.heybackend.domain.member.dto.AuthenticatedMember;
-import hey.io.heybackend.domain.member.dto.MemberInterestRequest;
 import hey.io.heybackend.domain.member.entity.Member;
 import hey.io.heybackend.domain.member.entity.MemberInterest;
 import hey.io.heybackend.domain.member.enums.InterestCategory;
+import hey.io.heybackend.domain.member.enums.InterestCode;
 import hey.io.heybackend.domain.member.repository.MemberInterestRepository;
 import hey.io.heybackend.domain.member.repository.MemberRepository;
 import hey.io.heybackend.domain.mypage.dto.MyPageDto.MemberDetailResponse;
 import hey.io.heybackend.domain.mypage.dto.MyPageDto.MemberDetailResponse.MemberInterestDto;
 import hey.io.heybackend.domain.mypage.dto.MyPageDto.ModifyMemberRequest;
-import hey.io.heybackend.domain.performance.enums.PerformanceGenre;
-import hey.io.heybackend.domain.performance.enums.PerformanceType;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,17 +34,17 @@ public class MyPageService {
     public MemberDetailResponse getMemberInfo(AuthenticatedMember authenticatedMember) {
 
         // 1. 회원 상세 정보 조회
-        MemberDetailResponse memberDetail = memberRepository.selectMemberDetail(authenticatedMember.getMemberId());
+        MemberDetailResponse memberDetail = memberRepository.selectMemberDetail(
+            authenticatedMember.getMemberId());
         if (memberDetail == null) {
             throw new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
         }
 
         // 2. 관심 정보 조회
-        List<String> typeList = memberRepository.selectMemberInterestList(InterestCategory.TYPE, authenticatedMember.getMemberId());
-        List<String> genreList = memberRepository.selectMemberInterestList(InterestCategory.GENRE, authenticatedMember.getMemberId());
-        MemberInterestDto interests = MemberInterestDto.of(typeList, genreList);
+        List<InterestCode> interestCodeList = memberRepository.selectInterestCodeList(authenticatedMember.getMemberId());
+        MemberInterestDto memberInterestDto = MemberInterestDto.of(interestCodeList);
 
-        return MemberDetailResponse.of(memberDetail, interests);
+        return MemberDetailResponse.of(memberDetail, memberInterestDto);
     }
 
     /**
@@ -68,11 +65,12 @@ public class MyPageService {
      * @return 회원 ID
      */
     @Transactional
-    public Long modifyMember(AuthenticatedMember authenticatedMember, ModifyMemberRequest modifyMemberRequest) {
+    public Long modifyMember(AuthenticatedMember authenticatedMember,
+        ModifyMemberRequest modifyMemberRequest) {
 
         // 1. 회원 조회
         Member member = memberRepository.findById(authenticatedMember.getMemberId())
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+            .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
         // 2. 닉네임 수정
         member.updateNickname(modifyMemberRequest.getNickname());
@@ -95,7 +93,7 @@ public class MyPageService {
                 MemberInterest memberInterest = MemberInterest.builder()
                     .member(member)
                     .interestCategory(InterestCategory.TYPE)
-                    .interestCode(type.getCode())
+                    .interestCode(type)
                     .build();
                 memberInterestRepository.save(memberInterest);
             });
@@ -107,7 +105,7 @@ public class MyPageService {
                 MemberInterest memberInterest = MemberInterest.builder()
                     .member(member)
                     .interestCategory(InterestCategory.GENRE)
-                    .interestCode(genre.getCode())
+                    .interestCode(genre)
                     .build();
                 memberInterestRepository.save(memberInterest);
             });

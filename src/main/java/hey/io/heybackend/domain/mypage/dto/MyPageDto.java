@@ -1,6 +1,8 @@
 package hey.io.heybackend.domain.mypage.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import hey.io.heybackend.domain.member.enums.InterestCategory;
+import hey.io.heybackend.domain.member.enums.InterestCode;
 import hey.io.heybackend.domain.performance.enums.PerformanceGenre;
 import hey.io.heybackend.domain.performance.enums.PerformanceType;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,9 +27,9 @@ public class MyPageDto {
         @Schema(description = "닉네임", example = "페스티벌 러버_54321")
         private String nickname;
         @Parameter(description = "관심 유형", array = @ArraySchema(schema = @Schema(implementation = PerformanceType.class)))
-        private List<PerformanceType> type;
+        private List<InterestCode> type;
         @Parameter(description = "관심 장르", array = @ArraySchema(schema = @Schema(implementation = PerformanceGenre.class)))
-        private List<PerformanceGenre> genre;
+        private List<InterestCode> genre;
 
     }
 
@@ -51,7 +53,8 @@ public class MyPageDto {
         private MemberInterestDto interests;
 
         @Getter
-        @Builder
+        @Builder(toBuilder = true)
+        @AllArgsConstructor
         @Schema(description = "관심 정보")
         public static class MemberInterestDto {
 
@@ -61,12 +64,27 @@ public class MyPageDto {
             @Schema(description = "관심 장르", example = "[\"BALLAD\", \"HIPHOP\"]")
             private List<String> genre;
 
-            public static MemberInterestDto of(List<String> typeList, List<String> genreList) {
+            public static MemberInterestDto of(List<InterestCode> interestCodeList) {
                 return MemberInterestDto.builder()
-                        .type(typeList)
-                        .genre(genreList)
-                        .build();
+                    .type(setType(interestCodeList))
+                    .genre(setGenre(interestCodeList))
+                    .build();
             }
+
+            private static List<String> setType(List<InterestCode> interestCodeList) {
+                return interestCodeList.stream()
+                    .filter(code -> code.getInterestCategory() == InterestCategory.TYPE)
+                    .map(InterestCode::getCode)
+                    .toList();
+            }
+
+            private static List<String> setGenre(List<InterestCode> interestCodeList) {
+                return interestCodeList.stream()
+                    .filter(code -> code.getInterestCategory() == InterestCategory.GENRE)
+                    .map(InterestCode::getCode)
+                    .toList();
+            }
+
         }
         @QueryProjection
         public MemberDetailResponse(Long memberId, String nickname, LocalDateTime accessedAt) {

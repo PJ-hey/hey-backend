@@ -78,7 +78,7 @@ public class MemberService {
                 MemberInterest memberInterest = MemberInterest.builder()
                     .member(member)
                     .interestCategory(InterestCategory.TYPE)
-                    .interestCode(type.getCode())
+                    .interestCode(type)
                     .build();
                 memberInterestRepository.save(memberInterest);
             });
@@ -90,7 +90,7 @@ public class MemberService {
                 MemberInterest memberInterest = MemberInterest.builder()
                     .member(member)
                     .interestCategory(InterestCategory.GENRE)
-                    .interestCode(genre.getCode())
+                    .interestCode(genre)
                     .build();
                 memberInterestRepository.save(memberInterest);
             });
