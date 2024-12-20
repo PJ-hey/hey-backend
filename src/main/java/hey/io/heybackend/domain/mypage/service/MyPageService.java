@@ -43,9 +43,8 @@ public class MyPageService {
         // 2. 관심 정보 조회
         List<InterestCode> interestCodeList = memberRepository.selectInterestCodeList(
             authenticatedMember.getMemberId());
-        MemberInterestDto memberInterestDto = MemberInterestDto.of(interestCodeList);
 
-        return MemberDetailResponse.of(memberDetail, memberInterestDto);
+        return MemberDetailResponse.of(memberDetail, MemberInterestDto.of(interestCodeList));
     }
 
     /**
