@@ -28,13 +28,13 @@ public class LoginController {
      * <p>로그인</p>
      *
      * @param provider kakao, google, apple
-     * @param code Authorization Code
+     * @param code     Authorization Code
      * @return 발급 토큰 정보
      */
     @GetMapping("/login/oauth2/code/{provider}")
     @Operation(summary = "로그인", description = "로그인을 수행합니다.")
     public ApiResponse<TokenDto> login(@PathVariable(name = "provider") Provider provider,
-                                       @RequestParam(name = "code") String code)
+        @RequestParam(name = "code") String code)
         throws ParseException, IOException, JOSEException {
         return ApiResponse.success(loginService.login(provider, code));
     }

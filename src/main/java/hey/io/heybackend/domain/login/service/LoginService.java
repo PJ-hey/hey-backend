@@ -1,8 +1,6 @@
 package hey.io.heybackend.domain.login.service;
 
 import com.nimbusds.jose.JOSEException;
-import hey.io.heybackend.common.exception.ErrorCode;
-import hey.io.heybackend.common.exception.notfound.EntityNotFoundException;
 import hey.io.heybackend.domain.auth.enums.AuthId;
 import hey.io.heybackend.domain.login.client.OAuthClient;
 import hey.io.heybackend.domain.login.dto.SocialUserInfo;
@@ -48,16 +46,18 @@ public class LoginService {
      * <p>로그인</p>
      *
      * @param provider kakao, google, apple
-     * @param code Authorization Code
+     * @param code     Authorization Code
      * @return 발급 토큰 정보
      */
     @Transactional
-    public TokenDto login(Provider provider, String code) throws ParseException, IOException, JOSEException {
+    public TokenDto login(Provider provider, String code)
+        throws ParseException, IOException, JOSEException {
 
         String token = getAccessTokenOrIdToken(provider, code);
         SocialUserInfo socialUserInfo = getSocialUserInfo(provider, token);
 
-        Optional<Member> optionalMember = memberRepository.selectMemberByProviderUid(socialUserInfo.providerUid());
+        Optional<Member> optionalMember = memberRepository.selectMemberByProviderUid(
+            socialUserInfo.providerUid());
 
         Member member;
 
@@ -116,14 +116,17 @@ public class LoginService {
     private Member updateMember(Member member, SocialUserInfo socialUserInfo) {
 
         if (member.getMemberStatus() == MemberStatus.INIT) {
-            member.updateMember(socialUserInfo.email(), socialUserInfo.name(), MemberStatus.INIT, false, LocalDateTime.now());
+            member.updateMember(socialUserInfo.email(), socialUserInfo.name(), MemberStatus.INIT,
+                false, LocalDateTime.now());
         } else {
-            member.updateMember(socialUserInfo.email(), socialUserInfo.name(), MemberStatus.ACTIVE, true, LocalDateTime.now());
+            member.updateMember(socialUserInfo.email(), socialUserInfo.name(), MemberStatus.ACTIVE,
+                true, LocalDateTime.now());
         }
 
         memberRepository.saveAndFlush(member);
 
-        SocialAccount socialAccount = socialAccountRepository.findByProviderUid(socialUserInfo.providerUid());
+        SocialAccount socialAccount = socialAccountRepository.findByProviderUid(
+            socialUserInfo.providerUid());
         socialAccount.updateSocialAccount(socialUserInfo.provider(), socialUserInfo.providerUid());
         socialAccountRepository.saveAndFlush(socialAccount);
 
@@ -131,7 +134,8 @@ public class LoginService {
 
     }
 
-    private String getAccessTokenOrIdToken(Provider provider, String code) throws IOException, ParseException, JOSEException {
+    private String getAccessTokenOrIdToken(Provider provider, String code)
+        throws IOException, ParseException, JOSEException {
         return switch (provider) {
             case KAKAO -> oAuthClient.getKakaoAccessToken(code);
             case GOOGLE -> oAuthClient.getGoogleAccessToken(code);
@@ -139,7 +143,7 @@ public class LoginService {
         };
     }
 
-    private SocialUserInfo getSocialUserInfo(Provider provider, String token) throws IOException, ParseException {
+    private SocialUserInfo getSocialUserInfo(Provider provider, String token) {
         return switch (provider) {
             case KAKAO -> oAuthClient.getKakaoUserInfo(token);
             case GOOGLE -> oAuthClient.getGoogleUserInfo(token);
