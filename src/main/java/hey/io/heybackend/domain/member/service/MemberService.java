@@ -35,9 +35,9 @@ public class MemberService {
 
         Member member = memberRepository.findById(authenticatedMember.getMemberId())
             .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
-        member.updateBasicTermsAgreed(memberTermsRequest.getBasicTermsAgreed());
+        member.updateBasicTermsAgreed(memberTermsRequest.isBasicTermsAgreed());
 
-        if (memberTermsRequest.getBasicTermsAgreed()) {
+        if (memberTermsRequest.isBasicTermsAgreed()) {
             member.updateMemberStatus(MemberStatus.ACTIVE);
         }
 

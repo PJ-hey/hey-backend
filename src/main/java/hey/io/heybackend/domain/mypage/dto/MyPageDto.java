@@ -8,6 +8,7 @@ import hey.io.heybackend.domain.performance.enums.PerformanceType;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,14 +24,21 @@ public class MyPageDto {
     @NoArgsConstructor
     @Schema(description = "회원 정보 수정")
     public static class ModifyMemberRequest {
+
         @NotNull
         @Schema(description = "닉네임", example = "페스티벌 러버_54321")
         private String nickname;
-        @Parameter(description = "관심 유형", array = @ArraySchema(schema = @Schema(implementation = PerformanceType.class)))
+        @Parameter(description = "관심 유형", array = @ArraySchema(schema = @Schema(implementation = InterestCode.class)))
         private List<InterestCode> type;
-        @Parameter(description = "관심 장르", array = @ArraySchema(schema = @Schema(implementation = PerformanceGenre.class)))
+        @Parameter(description = "관심 장르", array = @ArraySchema(schema = @Schema(implementation = InterestCode.class)))
         private List<InterestCode> genre;
 
+        @AssertTrue
+        public boolean isValidInterestCode() {
+            boolean isValidType = type.stream().allMatch(code -> code.getInterestCategory() == InterestCategory.TYPE);
+            boolean isValidGenre = genre.stream().allMatch(code -> code.getInterestCategory() == InterestCategory.GENRE);
+            return isValidType && isValidGenre;
+        }
     }
 
     @Getter
@@ -46,7 +54,7 @@ public class MyPageDto {
         @Schema(description = "닉네임", example = "페스티벌 러버_54321")
         private String nickname;
 
-        @Schema(description = "최종 접속 일시", example = "2024.11.29 12:35")
+        @Schema(description = "최종 접속 일시", example = "2024.11.29 12:35:00")
         private String accessedAt;
 
         @Schema(description = "관심 정보", implementation = MemberInterestDto.class)
@@ -86,17 +94,19 @@ public class MyPageDto {
             }
 
         }
+
         @QueryProjection
         public MemberDetailResponse(Long memberId, String nickname, LocalDateTime accessedAt) {
             this.memberId = memberId;
             this.nickname = nickname;
-            this.accessedAt = accessedAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+            this.accessedAt = accessedAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:dd"));
         }
 
-        public static MemberDetailResponse of(MemberDetailResponse memberDetail, MemberInterestDto interests) {
+        public static MemberDetailResponse of(MemberDetailResponse memberDetail,
+            MemberInterestDto interests) {
             return memberDetail.toBuilder()
-                    .interests(interests)
-                    .build();
+                .interests(interests)
+                .build();
         }
     }
 
