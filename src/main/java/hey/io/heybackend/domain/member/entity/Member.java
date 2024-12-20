@@ -84,12 +84,12 @@ public class Member extends BaseTimeEntity {
 
 
     // 약관 동의 정보 업데이트
-    public void setBasicTermsAgreed(Boolean basicTermsAgreed) {
+    public void updateBasicTermsAgreed(Boolean basicTermsAgreed) {
         this.basicTermsAgreed = basicTermsAgreed;
     }
 
     // 회원 상태 업데이트
-    public void setMemberStatus(MemberStatus memberStatus) {
+    public void updateMemberStatus(MemberStatus memberStatus) {
         this.memberStatus = memberStatus;
     }
 

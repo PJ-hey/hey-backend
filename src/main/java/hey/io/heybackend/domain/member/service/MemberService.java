@@ -35,10 +35,10 @@ public class MemberService {
 
         Member member = memberRepository.findById(authenticatedMember.getMemberId())
             .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
-        member.setBasicTermsAgreed(memberTermsRequest.getBasicTermsAgreed());
+        member.updateBasicTermsAgreed(memberTermsRequest.getBasicTermsAgreed());
 
         if (memberTermsRequest.getBasicTermsAgreed()) {
-            member.setMemberStatus(MemberStatus.ACTIVE);
+            member.updateMemberStatus(MemberStatus.ACTIVE);
         }
 
         return member.getMemberId();
