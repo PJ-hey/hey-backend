@@ -8,8 +8,8 @@ import lombok.Getter;
 @Schema(description = "약관 동의 여부")
 public class MemberTermsRequest {
 
-  @NotNull
-  @Schema(description = "필수 약관 동의 여부", example = "true")
-  private Boolean basicTermsAgreed;
+    @NotNull
+    @Schema(description = "필수 약관 동의 여부", example = "true")
+    private boolean basicTermsAgreed;
 
 }

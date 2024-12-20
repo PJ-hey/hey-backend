@@ -28,14 +28,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
 
 @OpenAPIDefinition(info = @Info(title = "hey API 문서",
-        description = "Hey! 프로젝트 관련 API 문서입니다.", version = "v1")
+    description = "Hey! 프로젝트 관련 API 문서입니다.", version = "v1")
 )
 @SecurityScheme(
-        name = "Bearer Authentication",
-        type = SecuritySchemeType.HTTP,
-        in = SecuritySchemeIn.HEADER,
-        bearerFormat = "JWT",
-        scheme = "bearer"
+    name = "Bearer Authentication",
+    type = SecuritySchemeType.HTTP,
+    in = SecuritySchemeIn.HEADER,
+    bearerFormat = "JWT",
+    scheme = "bearer"
 )
 @Configuration
 @RequiredArgsConstructor
@@ -47,11 +47,11 @@ public class SwaggerConfig {
         String[] paths = {"/**"};
 
         return GroupedOpenApi
-                .builder()
-                .group("hey API")
-                .pathsToMatch(paths)
-                .addOperationCustomizer(customize())
-                .build();
+            .builder()
+            .group("hey API")
+            .pathsToMatch(paths)
+            .addOperationCustomizer(customize())
+            .build();
     }
 
     /**
@@ -94,14 +94,14 @@ public class SwaggerConfig {
 
         // ExampleHolder(에러 응답값) 객체를 만들고 에러 코드별로 그룹화
         Map<Integer, List<ExampleHolder>> statusWithExampleHolders = Arrays.stream(errorCodes)
-                .map(
-                        errorCode -> ExampleHolder.builder()
-                                .holder(getSwaggerExample(errorCode))
-                                .code(errorCode.getHttpStatus().value())
-                                .name(errorCode.name())
-                                .build()
-                )
-                .collect(Collectors.groupingBy(ExampleHolder::getCode));
+            .map(
+                errorCode -> ExampleHolder.builder()
+                    .holder(getSwaggerExample(errorCode))
+                    .code(errorCode.getHttpStatus().value())
+                    .name(errorCode.name())
+                    .build()
+            )
+            .collect(Collectors.groupingBy(ExampleHolder::getCode));
 
         // ExampleHolders를 ApiResponses에 추가
         addExamplesToResponses(responses, statusWithExampleHolders);
@@ -118,10 +118,10 @@ public class SwaggerConfig {
 
         // ExampleHolder 객체 생성 및 ApiResponses에 추가
         ExampleHolder exampleHolder = ExampleHolder.builder()
-                .holder(getSwaggerExample(errorCode))
-                .name(errorCode.name())
-                .code(errorCode.getHttpStatus().value())
-                .build();
+            .holder(getSwaggerExample(errorCode))
+            .name(errorCode.name())
+            .code(errorCode.getHttpStatus().value())
+            .build();
 
         addExamplesToResponses(responses, exampleHolder);
     }
@@ -146,23 +146,23 @@ public class SwaggerConfig {
      * @param statusWithExampleHolders 상태 코드 + ExampleHolder(에러 응답값) 객체
      */
     private void addExamplesToResponses(ApiResponses responses,
-                                        Map<Integer, List<ExampleHolder>> statusWithExampleHolders) {
+        Map<Integer, List<ExampleHolder>> statusWithExampleHolders) {
         statusWithExampleHolders.forEach(
-                (status, v) -> {
-                    Content content = new Content();
-                    MediaType mediaType = new MediaType();
-                    ApiResponse apiResponse = new ApiResponse();
+            (status, v) -> {
+                Content content = new Content();
+                MediaType mediaType = new MediaType();
+                ApiResponse apiResponse = new ApiResponse();
 
-                    v.forEach(
-                            exampleHolder -> mediaType.addExamples(
-                                    exampleHolder.getName(),
-                                    exampleHolder.getHolder()
-                            )
-                    );
-                    content.addMediaType("application/json", mediaType);
-                    apiResponse.setContent(content);
-                    responses.addApiResponse(String.valueOf(status), apiResponse);
-                }
+                v.forEach(
+                    exampleHolder -> mediaType.addExamples(
+                        exampleHolder.getName(),
+                        exampleHolder.getHolder()
+                    )
+                );
+                content.addMediaType("application/json", mediaType);
+                apiResponse.setContent(content);
+                responses.addApiResponse(String.valueOf(status), apiResponse);
+            }
         );
     }
 

@@ -33,14 +33,14 @@ public class GlobalExceptionHandler {
     // 지원하지 않는 HTTP method를 호출할 경우
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ApiResponse<?> handleHttpRequestMethodNotSupportedException(
-            HttpRequestMethodNotSupportedException e) {
+        HttpRequestMethodNotSupportedException e) {
         log.error("HttpRequestMethodNotSupportedException : {}", e.getMessage());
         return ApiResponse.failure(ErrorCode.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     protected ApiResponse<?> handleHttpMessageNotReadableException(
-            HttpMessageNotReadableException e) {
+        HttpMessageNotReadableException e) {
         log.error("HttpMessageNotReadableException : {}", e.getMessage());
         return ApiResponse.failure(ErrorCode.INVALID_INPUT_VALUE);
     }
@@ -59,21 +59,23 @@ public class GlobalExceptionHandler {
 
     // 매개변수 유효성 검증에 실패할 경우
     @ExceptionHandler(HandlerMethodValidationException.class)
-    protected ApiResponse<?> handleHandlerMethodValidationException(HandlerMethodValidationException e) {
+    protected ApiResponse<?> handleHandlerMethodValidationException(
+        HandlerMethodValidationException e) {
         log.error(e.toString(), e);
         return ApiResponse.failure(ErrorCode.INVALID_INPUT_VALUE, getValidationErrorMessage(e));
     }
 
     // @Valid 유효성 검증에 실패할 경우
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ApiResponse<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    protected ApiResponse<?> handleMethodArgumentNotValidException(
+        MethodArgumentNotValidException e) {
         log.error(e.toString(), e);
         return ApiResponse.failure(ErrorCode.INVALID_INPUT_VALUE, getValidationError(e));
     }
 
     // 그 밖에 발생하는 모든 예외 처리
     @ExceptionHandler(value = {Exception.class, RuntimeException.class, SQLException.class,
-            DataIntegrityViolationException.class})
+        DataIntegrityViolationException.class})
     protected ApiResponse<?> handleException(Exception e) {
         log.error(e.toString(), e);
         return ApiResponse.failure(ErrorCode.INTERNAL_ERROR, e);
@@ -82,16 +84,16 @@ public class GlobalExceptionHandler {
     // 유효성 검증 메시지 생성 (HandlerMethodValidationException)
     private String getValidationErrorMessage(HandlerMethodValidationException e) {
         return e.getAllValidationResults().stream()
-                .map(ParameterValidationResult::getResolvableErrors)
-                .flatMap(List::stream)
-                .map(MessageSourceResolvable::getDefaultMessage)
-                .collect(Collectors.joining(", "));
+            .map(ParameterValidationResult::getResolvableErrors)
+            .flatMap(List::stream)
+            .map(MessageSourceResolvable::getDefaultMessage)
+            .collect(Collectors.joining(", "));
     }
 
     // 유효성 검증 오류 메시지 리스트 생성 (BindException)
     private List<ValidationError> getValidationError(BindException e) {
         return e.getBindingResult().getFieldErrors().stream()
-                .map(ValidationError::of)
-                .collect(Collectors.toList());
+            .map(ValidationError::of)
+            .collect(Collectors.toList());
     }
 }

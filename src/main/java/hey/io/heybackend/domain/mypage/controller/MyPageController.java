@@ -28,49 +28,49 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "Bearer Authentication")
 public class MyPageController {
 
-  private final MyPageService myPageService;
+    private final MyPageService myPageService;
 
-  /**
-   * <p>회원 정보 조회</p>
-   *
-   * @param authenticatedMember 인증 회원 정보
-   * @return 회원 정보
-   */
-  @GetMapping("/mypage/info")
-  @ApiErrorCode(ErrorCode.MEMBER_NOT_FOUND)
-  @Operation(summary = "회원 정보 조회", description = "회원 정보를 조회합니다.")
-  public ApiResponse<MemberDetailResponse> getMemberInfo(
-      @AuthUser @Parameter(hidden = true) AuthenticatedMember authenticatedMember) {
-    return ApiResponse.success(myPageService.getMemberInfo(authenticatedMember));
-  }
+    /**
+     * <p>회원 상세</p>
+     *
+     * @param authenticatedMember 인증 회원 정보
+     * @return 회원 상세 정보
+     */
+    @GetMapping("/mypage/info")
+    @ApiErrorCode(ErrorCode.MEMBER_NOT_FOUND)
+    @Operation(summary = "회원 정보 조회", description = "회원 정보를 조회합니다.")
+    public ApiResponse<MemberDetailResponse> getMemberInfo(
+        @AuthUser @Parameter(hidden = true) AuthenticatedMember authenticatedMember) {
+        return ApiResponse.created(myPageService.getMemberInfo(authenticatedMember));
+    }
 
-  /**
-   * <p>닉네임 중복 확인</p>
-   *
-   * @param nickname 닉네임
-   * @return 닉네임 중복 여부
-   */
-  @GetMapping("/mypage/info/nickname")
-  @Operation(summary = "닉네임 중복 확인", description = "닉네임 중복을 확인합니다.")
-  public ApiResponse<Boolean> existsNickname(@RequestParam("nickname") String nickname) {
-    return ApiResponse.success(myPageService.existsNickname(nickname));
-  }
+    /**
+     * <p>닉네임 중복 확인</p>
+     *
+     * @param nickname 닉네임
+     * @return 닉네임 중복 여부
+     */
+    @GetMapping("/mypage/info/nickname")
+    @Operation(summary = "닉네임 중복 확인", description = "닉네임 중복을 확인합니다.")
+    public ApiResponse<Boolean> existsNickname(@RequestParam("nickname") String nickname) {
+        return ApiResponse.created(myPageService.existsNickname(nickname));
+    }
 
-  /**
-   * <p>회원 정보 수정</p>
-   *
-   * @param authenticatedMember 인증 회원 정보
-   * @param modifyMemberRequest 회원 정보
-   * @return 회원 ID
-   */
-  @PutMapping("/mypage/info")
-  @ApiErrorCode(ErrorCode.MEMBER_NOT_FOUND)
-  @Operation(summary = "회원 정보 수정", description = "회원 정보를 수정합니다.")
-  public ApiResponse<Long> modifyMember(
-      @AuthUser @Parameter(hidden = true) AuthenticatedMember authenticatedMember,
-      @RequestBody @Valid ModifyMemberRequest modifyMemberRequest) {
-    return ApiResponse.created(
-        myPageService.modifyMember(authenticatedMember, modifyMemberRequest));
-  }
+    /**
+     * <p>회원 정보 수정</p>
+     *
+     * @param authenticatedMember 인증 회원 정보
+     * @param modifyMemberRequest 회원 정보
+     * @return 회원 ID
+     */
+    @PutMapping("/mypage/info")
+    @ApiErrorCode(ErrorCode.MEMBER_NOT_FOUND)
+    @Operation(summary = "회원 정보 수정", description = "회원 정보를 수정합니다.")
+    public ApiResponse<Long> modifyMember(
+        @AuthUser @Parameter(hidden = true) AuthenticatedMember authenticatedMember,
+        @RequestBody @Valid ModifyMemberRequest modifyMemberRequest) {
+        return ApiResponse.created(
+            myPageService.modifyMember(authenticatedMember, modifyMemberRequest));
+    }
 
 }

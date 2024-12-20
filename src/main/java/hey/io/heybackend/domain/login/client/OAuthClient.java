@@ -70,7 +70,7 @@ public class OAuthClient {
     }
 
     // 카카오 회원 정보 요청
-    public SocialUserInfo getKakaoUserInfo(String accessToken)  {
+    public SocialUserInfo getKakaoUserInfo(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -78,10 +78,10 @@ public class OAuthClient {
         HttpEntity<String> request = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(
-                kakaoProperties.userInfoUrl(),
-                HttpMethod.POST,
-                request,
-                String.class
+            kakaoProperties.userInfoUrl(),
+            HttpMethod.POST,
+            request,
+            String.class
         );
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -122,8 +122,9 @@ public class OAuthClient {
         headers.setBearerAuth(accessToken);
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<String> userInfoResponse = restTemplate.exchange(googleProperties.userInfoUrl(), HttpMethod.GET,
-                httpEntity, String.class);
+        ResponseEntity<String> userInfoResponse = restTemplate.exchange(
+            googleProperties.userInfoUrl(), HttpMethod.GET,
+            httpEntity, String.class);
 
         try {
             JsonNode jsonNode = objectMapper.readTree(userInfoResponse.getBody());
@@ -179,7 +180,8 @@ public class OAuthClient {
     }
 
     // 유효성 검사
-    private boolean validateAppleIdToken(String idToken) throws ParseException, JOSEException, IOException {
+    private boolean validateAppleIdToken(String idToken)
+        throws ParseException, JOSEException, IOException {
         SignedJWT signedJWT = SignedJWT.parse(idToken);
 
         // 공개 키 조회
@@ -198,18 +200,18 @@ public class OAuthClient {
     private String createClientSecret() {
         PrivateKey privateKey = getPrivateKey();
 
-        long nowMillis  = System.currentTimeMillis();
+        long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
 
         return Jwts.builder()
-                .setHeaderParam("kid", appleProperties.keyId())
-                .setIssuer(appleProperties.teamId())
-                .setIssuedAt(now)
-                .setExpiration(new Date(nowMillis + 86400000))// 1일
-                .setAudience("https://appleid.apple.com")
-                .setSubject(appleProperties.clientId())
-                .signWith(privateKey, SignatureAlgorithm.ES256)
-                .compact();
+            .setHeaderParam("kid", appleProperties.keyId())
+            .setIssuer(appleProperties.teamId())
+            .setIssuedAt(now)
+            .setExpiration(new Date(nowMillis + 86400000))// 1일
+            .setAudience("https://appleid.apple.com")
+            .setSubject(appleProperties.clientId())
+            .signWith(privateKey, SignatureAlgorithm.ES256)
+            .compact();
     }
 
     // 개인키 조회

@@ -18,11 +18,12 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.getParameterType().equals(AuthenticatedMember.class) &&
-                parameter.hasParameterAnnotation(AuthUser.class);
+            parameter.hasParameterAnnotation(AuthUser.class);
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+        NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
@@ -33,8 +34,8 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
         Set<GrantedAuthority> authorities = (Set<GrantedAuthority>) authenticatedMember.getAuthorities();
 
         return AuthenticatedMember.builder()
-                .memberId(memberId)
-                .authorities(authorities)
-                .build();
+            .memberId(memberId)
+            .authorities(authorities)
+            .build();
     }
 }

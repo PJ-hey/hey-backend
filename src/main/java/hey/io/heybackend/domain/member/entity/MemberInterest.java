@@ -2,6 +2,7 @@ package hey.io.heybackend.domain.member.entity;
 
 import hey.io.heybackend.common.entity.BaseTimeEntity;
 import hey.io.heybackend.domain.member.enums.InterestCategory;
+import hey.io.heybackend.domain.member.enums.InterestCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -36,21 +37,16 @@ public class MemberInterest extends BaseTimeEntity {
     private InterestCategory interestCategory;
 
     @Column(nullable = false)
-    private String interestCode;
+    @Enumerated(EnumType.STRING)
+    private InterestCode interestCode;
 
     @Builder
-    private MemberInterest(Member member, InterestCategory interestCategory, String interestCode) {
+    private MemberInterest(Member member, InterestCategory interestCategory,
+        InterestCode interestCode) {
         this.member = member;
         this.interestCategory = interestCategory;
         this.interestCode = interestCode;
     }
 
-    public static MemberInterest of(Member member, InterestCategory interestCategory, String interestCode) {
-        return MemberInterest.builder()
-                .member(member)
-                .interestCategory(interestCategory)
-                .interestCode(interestCode)
-                .build();
-    }
 
 }

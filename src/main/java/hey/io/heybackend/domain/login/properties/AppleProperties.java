@@ -12,4 +12,5 @@ public record AppleProperties(
     String tokenUrl,
     String redirectUri
 ) {
+
 }

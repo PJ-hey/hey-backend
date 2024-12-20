@@ -43,37 +43,37 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // CSRF 설정
         return setCsrf(http)
-                // 세션을 사용하지 않음
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            // 세션을 사용하지 않음
+            .sessionManagement(
+                session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                // 요청 인증 설정
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/health_check").permitAll() // Swagger 경로 허용
-                        .requestMatchers("/access").permitAll() // 토큰 발급 기능 허용
-                        .requestMatchers("/login/**").permitAll() // 로그인
-                        .requestMatchers("/performances/**").permitAll() // 공연 조회 기능 허용
-                        .requestMatchers("/artists/**").permitAll() // 아티스트 조회 기능 허용
-                        .requestMatchers("/main").permitAll() // 메인
-                        .requestMatchers("/member/terms").permitAll() // 약간 동의
-                        .requestMatchers("/search/**").permitAll()
-                        .anyRequest().authenticated() // 그 외 요청은 인증 필요
-                )
+            // 요청 인증 설정
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/health_check")
+                .permitAll() // Swagger 경로 허용
+                .requestMatchers("/access").permitAll() // 토큰 발급 기능 허용
+                .requestMatchers("/login/**").permitAll() // 로그인
+                .requestMatchers("/performances/**").permitAll() // 공연 조회 기능 허용
+                .requestMatchers("/artists/**").permitAll() // 아티스트 조회 기능 허용
+                .anyRequest().authenticated() // 그 외 요청은 인증 필요
+            )
 
-                // 익명 권한 설정
-                .anonymous(anonymous -> anonymous
-                        .principal("guest")
-                        .authorities("ANONYMOUS"))
+            // 익명 권한 설정
+            .anonymous(anonymous -> anonymous
+                .principal("guest")
+                .authorities("ANONYMOUS"))
 
-                // JWT 인증 필터 적용
-                .addFilterBefore(jwtAuthenticationProcessingFilter, UsernamePasswordAuthenticationFilter.class)
+            // JWT 인증 필터 적용
+            .addFilterBefore(jwtAuthenticationProcessingFilter,
+                UsernamePasswordAuthenticationFilter.class)
 
-                // 예외 처리 적용
-                .exceptionHandling(exceptionHandling -> {
-                    exceptionHandling.authenticationEntryPoint(new JwtAuthenticationEntryPoint());
-                    exceptionHandling.accessDeniedHandler(new JwtAccessDeniedHandler());
-                })
+            // 예외 처리 적용
+            .exceptionHandling(exceptionHandling -> {
+                exceptionHandling.authenticationEntryPoint(new JwtAuthenticationEntryPoint());
+                exceptionHandling.accessDeniedHandler(new JwtAccessDeniedHandler());
+            })
 
-                .build();
+            .build();
     }
 
     private HttpSecurity setCsrf(HttpSecurity http) throws Exception {

@@ -35,10 +35,10 @@ public class MemberService {
 
         Member member = memberRepository.findById(authenticatedMember.getMemberId())
             .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
-        member.setBasicTermsAgreed(memberTermsRequest.getBasicTermsAgreed());
+        member.updateBasicTermsAgreed(memberTermsRequest.isBasicTermsAgreed());
 
-        if (memberTermsRequest.getBasicTermsAgreed()) {
-            member.setMemberStatus(MemberStatus.ACTIVE);
+        if (memberTermsRequest.isBasicTermsAgreed()) {
+            member.updateMemberStatus(MemberStatus.ACTIVE);
         }
 
         return member.getMemberId();
@@ -78,7 +78,7 @@ public class MemberService {
                 MemberInterest memberInterest = MemberInterest.builder()
                     .member(member)
                     .interestCategory(InterestCategory.TYPE)
-                    .interestCode(type.getCode())
+                    .interestCode(type)
                     .build();
                 memberInterestRepository.save(memberInterest);
             });
@@ -90,7 +90,7 @@ public class MemberService {
                 MemberInterest memberInterest = MemberInterest.builder()
                     .member(member)
                     .interestCategory(InterestCategory.GENRE)
-                    .interestCode(genre.getCode())
+                    .interestCode(genre)
                     .build();
                 memberInterestRepository.save(memberInterest);
             });

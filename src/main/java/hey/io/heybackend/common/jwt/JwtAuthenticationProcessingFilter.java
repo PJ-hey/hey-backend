@@ -7,7 +7,6 @@ import hey.io.heybackend.common.exception.unauthorized.UnAuthorizedException;
 import hey.io.heybackend.common.response.ApiResponse;
 import hey.io.heybackend.domain.member.entity.Member;
 import hey.io.heybackend.domain.member.repository.MemberRepository;
-import hey.io.heybackend.domain.member.service.MemberService;
 import hey.io.heybackend.domain.user.dto.TokenDto;
 import hey.io.heybackend.domain.user.service.TokenService;
 import jakarta.servlet.FilterChain;
@@ -36,15 +35,16 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     private final MemberRepository memberRepository;
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+        @NonNull HttpServletResponse response,
+        @NonNull FilterChain filterChain)
+        throws ServletException, IOException {
 
         try {
             // refreshToken 토큰 추출, 유효성 검사
             String refreshToken = jwtTokenProvider.extractRefreshToken(request)
-                    .filter(jwtTokenProvider::validateToken)
-                    .orElse(null);
+                .filter(jwtTokenProvider::validateToken)
+                .orElse(null);
 
             // refreshToken이 존재하면, accessToken 토큰 재발급
             if (refreshToken != null) {
@@ -63,20 +63,24 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     }
 
     // accessToken 재발급
-    private void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
+    private void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response,
+        String refreshToken) {
         Member member = memberRepository.selectMemberByRefreshToken(refreshToken)
             .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
         TokenDto tokenDto = tokenService.insertToken(member);
-        jwtTokenProvider.sendAccessAndRefreshToken(response, tokenDto.getAccessToken(), tokenDto.getRefreshToken());
+        jwtTokenProvider.sendAccessAndRefreshToken(response, tokenDto.getAccessToken(),
+            tokenDto.getRefreshToken());
     }
 
     // accessToken 인증
-    private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                                  FilterChain filterChain) throws ServletException, IOException {
+    private void checkAccessTokenAndAuthentication(HttpServletRequest request,
+        HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException {
         jwtTokenProvider.extractAccessToken(request)
-                        .filter(jwtTokenProvider::validateToken)
-                        .ifPresent(accessToken -> saveAuthentication(jwtTokenProvider.getAuthentication(accessToken)));
+            .filter(jwtTokenProvider::validateToken)
+            .ifPresent(
+                accessToken -> saveAuthentication(jwtTokenProvider.getAuthentication(accessToken)));
 
         filterChain.doFilter(request, response);
     }
@@ -87,7 +91,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     }
 
     // 인증 실패 에러
-    private void handleUnauthorizedException(HttpServletResponse response, UnAuthorizedException e) throws IOException {
+    private void handleUnauthorizedException(HttpServletResponse response, UnAuthorizedException e)
+        throws IOException {
         ApiResponse<?> apiResponse = ApiResponse.failure(e.getErrorCode());
 
         String jsonErrorResponse = new ObjectMapper().writeValueAsString(apiResponse);

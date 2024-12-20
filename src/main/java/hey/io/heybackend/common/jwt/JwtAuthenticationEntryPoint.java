@@ -17,7 +17,8 @@ import org.springframework.stereotype.Component;
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+        AuthenticationException authException) throws IOException, ServletException {
         ApiResponse<?> apiResponse = ApiResponse.failure(ErrorCode.UNAUTHORIZED);
 
         ObjectMapper objectMapper = new ObjectMapper();

@@ -10,4 +10,5 @@ public record KakaoProperties(
     String userInfoUrl,
     String redirectUri
 ) {
+
 }
