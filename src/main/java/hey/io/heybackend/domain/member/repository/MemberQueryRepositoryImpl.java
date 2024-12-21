@@ -10,14 +10,15 @@ import static hey.io.heybackend.domain.user.entity.QUserAuth.userAuth;
 import hey.io.heybackend.common.repository.Querydsl5RepositorySupport;
 import hey.io.heybackend.domain.auth.enums.AuthId;
 import hey.io.heybackend.domain.member.entity.Member;
-import hey.io.heybackend.domain.member.enums.InterestCategory;
+import hey.io.heybackend.domain.member.enums.InterestCode;
 import hey.io.heybackend.domain.mypage.dto.MyPageDto.MemberDetailResponse;
 import hey.io.heybackend.domain.mypage.dto.QMyPageDto_MemberDetailResponse;
 import java.util.List;
 import java.util.Optional;
 
 
-public class MemberQueryRepositoryImpl extends Querydsl5RepositorySupport implements MemberQueryRepository {
+public class MemberQueryRepositoryImpl extends Querydsl5RepositorySupport implements
+    MemberQueryRepository {
 
     public MemberQueryRepositoryImpl() {
         super(Member.class);
@@ -26,32 +27,32 @@ public class MemberQueryRepositoryImpl extends Querydsl5RepositorySupport implem
     /**
      * <p>회원 정보</p>
      *
-     * @param providerUid
-     * @return 회원 정보
+     * @param providerUid 소셜 ID
+     * @return 회원
      */
     @Override
     public Optional<Member> selectMemberByProviderUid(String providerUid) {
         return Optional.ofNullable(
-                selectFrom(member)
-                        .join(socialAccount).on(member.memberId.eq(socialAccount.member.memberId))
-                        .where(socialAccount.providerUid.eq(providerUid))
-                        .fetchOne()
+            selectFrom(member)
+                .join(socialAccount).on(member.memberId.eq(socialAccount.member.memberId))
+                .where(socialAccount.providerUid.eq(providerUid))
+                .fetchOne()
         );
     }
 
     /**
      * <p>회원 정보</p>
      *
-     * @param refreshToken refresh 토큰
-     * @return 회원 정보
+     * @param refreshToken 리프레시 토큰
+     * @return 회원
      */
     @Override
     public Optional<Member> selectMemberByRefreshToken(String refreshToken) {
         Member optionalMember = select(member)
-                .from(member)
-                .join(token).on(member.memberId.eq(token.memberId)).fetchJoin()
-                .where(token.refreshToken.eq(refreshToken))
-                .fetchFirst();
+            .from(member)
+            .join(token).on(member.memberId.eq(token.memberId)).fetchJoin()
+            .where(token.refreshToken.eq(refreshToken))
+            .fetchFirst();
 
         return Optional.ofNullable(optionalMember);
     }
@@ -60,17 +61,17 @@ public class MemberQueryRepositoryImpl extends Querydsl5RepositorySupport implem
      * <p>회원 상세</p>
      *
      * @param memberId 회원 ID
-     * @return 회원 상세 정보
+     * @return 회원 상세 정보 + 관심 정보
      */
     @Override
     public MemberDetailResponse selectMemberDetail(Long memberId) {
         return select(new QMyPageDto_MemberDetailResponse(
-                member.memberId,
-                member.nickname,
-                member.accessedAt
+            member.memberId,
+            member.nickname,
+            member.accessedAt
         )).from(member)
-                .where(member.memberId.eq(memberId))
-                .fetchOne();
+            .where(member.memberId.eq(memberId))
+            .fetchOne();
     }
 
     /**
@@ -88,18 +89,19 @@ public class MemberQueryRepositoryImpl extends Querydsl5RepositorySupport implem
     }
 
     /**
-     * <p>회원 관심 목록</p>
+     * <p>관심 정보 목록</p>
      *
-     * @param category 카테고리
      * @param memberId 회원 ID
-     * @return 회원 관심 목록 정보
+     * @return 관심 정보 목록
      */
     @Override
-    public List<String> selectMemberInterestList(InterestCategory category, Long memberId) {
-        return select(memberInterest.interestCode)
-                .from(memberInterest)
-                .where(memberInterest.interestCategory.eq(category), memberInterest.member.memberId.eq(memberId))
-                .fetch();
+    public List<InterestCode> selectInterestCodeList(Long memberId) {
+        return select(
+            memberInterest.interestCode
+        )
+            .from(memberInterest)
+            .where(memberInterest.member.memberId.eq(memberId))
+            .fetch();
     }
 
 }

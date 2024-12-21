@@ -15,33 +15,33 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class GuestOrAuthUserArgumentResolver implements HandlerMethodArgumentResolver {
 
-  @Override
-  public boolean supportsParameter(MethodParameter parameter) {
-    return parameter.getParameterType().equals(AuthenticatedMember.class) &&
-        parameter.hasParameterAnnotation(GuestOrAuthUser.class);
-  }
-
-  @Override
-  public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-      NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (authentication != null && authentication.isAuthenticated()
-        && authentication.getPrincipal() instanceof AuthenticatedMember) {
-      AuthenticatedMember authenticatedMember = (AuthenticatedMember) authentication.getPrincipal();
-
-      Long memberId = authenticatedMember.getMemberId();
-      Set<GrantedAuthority> authorities = (Set<GrantedAuthority>) authenticatedMember.getAuthorities();
-
-      return AuthenticatedMember.builder()
-          .memberId(memberId)
-          .authorities(authorities)
-          .build();
-    } else {
-      return AuthenticatedMember.builder()
-          .memberId(null)
-          .authorities(null)
-          .build();
+    @Override
+    public boolean supportsParameter(MethodParameter parameter) {
+        return parameter.getParameterType().equals(AuthenticatedMember.class) &&
+            parameter.hasParameterAnnotation(GuestOrAuthUser.class);
     }
-  }
+
+    @Override
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+        NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()
+            && authentication.getPrincipal() instanceof AuthenticatedMember) {
+            AuthenticatedMember authenticatedMember = (AuthenticatedMember) authentication.getPrincipal();
+
+            Long memberId = authenticatedMember.getMemberId();
+            Set<GrantedAuthority> authorities = (Set<GrantedAuthority>) authenticatedMember.getAuthorities();
+
+            return AuthenticatedMember.builder()
+                .memberId(memberId)
+                .authorities(authorities)
+                .build();
+        } else {
+            return AuthenticatedMember.builder()
+                .memberId(null)
+                .authorities(null)
+                .build();
+        }
+    }
 }

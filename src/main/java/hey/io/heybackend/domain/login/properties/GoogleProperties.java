@@ -10,4 +10,5 @@ public record GoogleProperties(
     String userInfoUrl,
     String redirectUri
 ) {
+
 }

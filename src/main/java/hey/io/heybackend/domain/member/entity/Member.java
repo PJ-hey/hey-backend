@@ -47,7 +47,7 @@ public class Member extends BaseTimeEntity {
     private MemberStatus memberStatus;
 
     @Column(name = "basic_terms_agreed")
-    private Boolean basicTermsAgreed;
+    private boolean basicTermsAgreed;
 
     @Column(name = "accessed_at")
     private LocalDateTime accessedAt;
@@ -55,7 +55,7 @@ public class Member extends BaseTimeEntity {
 
     @Builder
     public Member(String email, String name, String nickname,
-                   MemberStatus memberStatus, boolean basicTermsAgreed, LocalDateTime accessedAt) {
+        MemberStatus memberStatus, boolean basicTermsAgreed, LocalDateTime accessedAt) {
         this.email = email;
         this.name = (name != null) ? name : nickname;
         this.nickname = nickname;
@@ -65,7 +65,8 @@ public class Member extends BaseTimeEntity {
     }
 
     // 회원 정보 업데이트
-    public Member updateMember(String email, String name, MemberStatus memberStatus, Boolean basicTermsAgreed, LocalDateTime accessedAt) {
+    public Member updateMember(String email, String name, MemberStatus memberStatus,
+        Boolean basicTermsAgreed, LocalDateTime accessedAt) {
         this.email = email;
         this.name = name;
         this.memberStatus = memberStatus;
@@ -84,12 +85,12 @@ public class Member extends BaseTimeEntity {
 
 
     // 약관 동의 정보 업데이트
-    public void setBasicTermsAgreed(Boolean basicTermsAgreed) {
+    public void updateBasicTermsAgreed(boolean basicTermsAgreed) {
         this.basicTermsAgreed = basicTermsAgreed;
     }
 
     // 회원 상태 업데이트
-    public void setMemberStatus(MemberStatus memberStatus) {
+    public void updateMemberStatus(MemberStatus memberStatus) {
         this.memberStatus = memberStatus;
     }
 

@@ -12,7 +12,8 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class OAuth2Util {
 
-    public String getAccessToken(String tokenUrl, HttpHeaders headers, Map<String, String> bodyMap) { // 카카오로그인, 구글로그인
+    public String getAccessToken(String tokenUrl, HttpHeaders headers,
+        Map<String, String> bodyMap) { // 카카오로그인, 구글로그인
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.setAll(bodyMap);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
@@ -21,7 +22,8 @@ public class OAuth2Util {
         return (String) response.getBody().get("access_token");
     }
 
-    public String getIdentityToken(String tokenUrl, HttpHeaders headers, Map<String, String> bodyMap) { // 애플로그인
+    public String getIdentityToken(String tokenUrl, HttpHeaders headers,
+        Map<String, String> bodyMap) { // 애플로그인
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.setAll(bodyMap);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);

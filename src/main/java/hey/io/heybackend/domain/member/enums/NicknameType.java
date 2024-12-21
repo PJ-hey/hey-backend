@@ -68,7 +68,8 @@ public enum NicknameType {
         return nickname;
     }
 
-    private static final List<NicknameType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
+    private static final List<NicknameType> VALUES = Collections.unmodifiableList(
+        Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
     private static final Random RANDOM = new Random();
 

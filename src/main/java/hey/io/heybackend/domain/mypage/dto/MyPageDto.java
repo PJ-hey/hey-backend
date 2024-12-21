@@ -1,11 +1,12 @@
 package hey.io.heybackend.domain.mypage.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import hey.io.heybackend.domain.performance.enums.PerformanceGenre;
-import hey.io.heybackend.domain.performance.enums.PerformanceType;
+import hey.io.heybackend.domain.member.enums.InterestCategory;
+import hey.io.heybackend.domain.member.enums.InterestCode;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,14 +22,26 @@ public class MyPageDto {
     @NoArgsConstructor
     @Schema(description = "회원 정보 수정")
     public static class ModifyMemberRequest {
+
         @NotNull
         @Schema(description = "닉네임", example = "페스티벌 러버_54321")
         private String nickname;
-        @Parameter(description = "관심 유형", array = @ArraySchema(schema = @Schema(implementation = PerformanceType.class)))
-        private List<PerformanceType> type;
-        @Parameter(description = "관심 장르", array = @ArraySchema(schema = @Schema(implementation = PerformanceGenre.class)))
-        private List<PerformanceGenre> genre;
+        @Parameter(description = "관심 유형", array = @ArraySchema(schema = @Schema(implementation = InterestCode.class)))
+        private List<InterestCode> type;
+        @Parameter(description = "관심 장르", array = @ArraySchema(schema = @Schema(implementation = InterestCode.class)))
+        private List<InterestCode> genre;
 
+        @AssertTrue
+        public boolean isValidInterestCode() {
+            if (type == null && genre == null) {
+                return true;
+            }
+            boolean isValidType = type == null || type.stream()
+                .allMatch(code -> code.getInterestCategory() == InterestCategory.TYPE);
+            boolean isValidGenre = genre == null || genre.stream()
+                .allMatch(code -> code.getInterestCategory() == InterestCategory.GENRE);
+            return isValidType && isValidGenre;
+        }
     }
 
     @Getter
@@ -44,14 +57,15 @@ public class MyPageDto {
         @Schema(description = "닉네임", example = "페스티벌 러버_54321")
         private String nickname;
 
-        @Schema(description = "최종 접속 일시", example = "2024.11.29 12:35")
+        @Schema(description = "최종 접속 일시", example = "2024.11.29 12:35:00")
         private String accessedAt;
 
         @Schema(description = "관심 정보", implementation = MemberInterestDto.class)
         private MemberInterestDto interests;
 
         @Getter
-        @Builder
+        @Builder(toBuilder = true)
+        @AllArgsConstructor
         @Schema(description = "관심 정보")
         public static class MemberInterestDto {
 
@@ -61,24 +75,41 @@ public class MyPageDto {
             @Schema(description = "관심 장르", example = "[\"BALLAD\", \"HIPHOP\"]")
             private List<String> genre;
 
-            public static MemberInterestDto of(List<String> typeList, List<String> genreList) {
+            public static MemberInterestDto of(List<InterestCode> interestCodeList) {
                 return MemberInterestDto.builder()
-                        .type(typeList)
-                        .genre(genreList)
-                        .build();
+                    .type(setType(interestCodeList))
+                    .genre(setGenre(interestCodeList))
+                    .build();
             }
+
+            private static List<String> setType(List<InterestCode> interestCodeList) {
+                return interestCodeList.stream()
+                    .filter(code -> code.getInterestCategory() == InterestCategory.TYPE)
+                    .map(InterestCode::getCode)
+                    .toList();
+            }
+
+            private static List<String> setGenre(List<InterestCode> interestCodeList) {
+                return interestCodeList.stream()
+                    .filter(code -> code.getInterestCategory() == InterestCategory.GENRE)
+                    .map(InterestCode::getCode)
+                    .toList();
+            }
+
         }
+
         @QueryProjection
         public MemberDetailResponse(Long memberId, String nickname, LocalDateTime accessedAt) {
             this.memberId = memberId;
             this.nickname = nickname;
-            this.accessedAt = accessedAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+            this.accessedAt = accessedAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:dd"));
         }
 
-        public static MemberDetailResponse of(MemberDetailResponse memberDetail, MemberInterestDto interests) {
+        public static MemberDetailResponse of(MemberDetailResponse memberDetail,
+            MemberInterestDto interests) {
             return memberDetail.toBuilder()
-                    .interests(interests)
-                    .build();
+                .interests(interests)
+                .build();
         }
     }
 
