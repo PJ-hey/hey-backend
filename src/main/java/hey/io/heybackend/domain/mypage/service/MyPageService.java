@@ -38,7 +38,7 @@ public class MyPageService {
             throw new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
         }
 
-        // 2. 관심 정보 조회
+        // 2. 관심 분야 조회
         List<InterestCode> interestCodeList = memberInterestService.getMemberInterest(
             authenticatedMember.getMemberId());
 
@@ -73,10 +73,10 @@ public class MyPageService {
         // 2. 닉네임 수정
         member.updateNickname(modifyMemberRequest.getNickname());
 
-        // 3. 관심 정보 삭제
+        // 3. 관심 분야 삭제
         memberInterestService.deleteMemberInterest(member);
 
-        // 4. 관심 정보 등록
+        // 4. 관심 분야 등록
         memberInterestService.insertMemberInterest(member, modifyMemberRequest.getType(),
             modifyMemberRequest.getGenre());
 

@@ -18,6 +18,13 @@ public class MemberInterestService {
     private final MemberRepository memberRepository;
     private final MemberInterestRepository memberInterestRepository;
 
+    /**
+     * <p>관심 분야 등록</p>
+     *
+     * @param member    회원 정보
+     * @param typeList  관심 유형 목록
+     * @param genreList 관심 장르 목록
+     */
     @Transactional
     public void insertMemberInterest(Member member, List<InterestCode> typeList,
         List<InterestCode> genreList) {
@@ -46,10 +53,21 @@ public class MemberInterestService {
         }
     }
 
+    /**
+     * <p>관심 분야 조회</p>
+     *
+     * @param memberId 회원 ID
+     * @return 관심 분야 목록
+     */
     public List<InterestCode> getMemberInterest(Long memberId) {
         return memberRepository.selectInterestCodeList(memberId);
     }
 
+    /**
+     * <p>관심 분야 삭제</p>
+     *
+     * @param member 회원 정보
+     */
     @Transactional
     public void deleteMemberInterest(Member member) {
         memberInterestRepository.deleteByMember(member);

@@ -15,16 +15,20 @@ public class MemberInterestRequest {
 
     @Parameter(description = "관심 유형", array = @ArraySchema(schema = @Schema(implementation = InterestCode.class)))
     private List<InterestCode> type;
+
     @Parameter(description = "관심 장르", array = @ArraySchema(schema = @Schema(implementation = InterestCode.class)))
     private List<InterestCode> genre;
 
     @AssertTrue
     public boolean isValidInterestCode() {
-        boolean isValidType = type.stream()
+        if (type == null && genre == null) {
+            return true;
+        }
+        boolean isValidType = type == null || type.stream()
             .allMatch(code -> code.getInterestCategory() == InterestCategory.TYPE);
-        boolean isValidGenre = genre.stream()
+        boolean isValidGenre = genre == null || genre.stream()
             .allMatch(code -> code.getInterestCategory() == InterestCategory.GENRE);
+
         return isValidType && isValidGenre;
     }
-
 }

@@ -44,7 +44,7 @@ public class MemberService {
     }
 
     /**
-     * <p>관심 정보 등록</p>
+     * <p>관심 분야 등록</p>
      *
      * @param authenticatedMember   인증 회원 정보
      * @param memberInterestRequest 관심 정보 목록
@@ -58,10 +58,10 @@ public class MemberService {
         Member member = memberRepository.findById(authenticatedMember.getMemberId())
             .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-        // 2. 관심 정보 삭제
+        // 2. 관심 분야 삭제
         memberInterestService.deleteMemberInterest(member);
 
-        // 3. 관심 정보 등록
+        // 3. 관심 분야 등록
         memberInterestService.insertMemberInterest(member, memberInterestRequest.getType(),
             memberInterestRequest.getGenre());
 

@@ -47,7 +47,7 @@ public class MemberController {
     }
 
     /**
-     * <p>관심 정보 등록</p>
+     * <p>관심 분야 등록</p>
      *
      * @param authenticatedMember   인증 회원 정보
      * @param memberInterestRequest 관심 정보 목록
