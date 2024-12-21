@@ -6,10 +6,7 @@ import hey.io.heybackend.domain.member.dto.AuthenticatedMember;
 import hey.io.heybackend.domain.member.dto.MemberInterestRequest;
 import hey.io.heybackend.domain.member.dto.MemberTermsRequest;
 import hey.io.heybackend.domain.member.entity.Member;
-import hey.io.heybackend.domain.member.entity.MemberInterest;
-import hey.io.heybackend.domain.member.enums.InterestCategory;
 import hey.io.heybackend.domain.member.enums.MemberStatus;
-import hey.io.heybackend.domain.member.repository.MemberInterestRepository;
 import hey.io.heybackend.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final MemberInterestRepository memberInterestRepository;
+
+    private final MemberInterestService memberInterestService;
 
     /**
      * <p>약관 동의</p>
@@ -61,39 +59,13 @@ public class MemberService {
             .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
         // 2. 관심 정보 삭제
-        memberInterestRepository.deleteByMember(member);
+        memberInterestService.deleteMemberInterest(member);
 
         // 3. 관심 정보 등록
-        insertMemberInterests(member, memberInterestRequest);
+        memberInterestService.insertMemberInterest(member, memberInterestRequest.getType(),
+            memberInterestRequest.getGenre());
 
         return member.getMemberId();
     }
 
-    // 관심 정보 등록
-    private void insertMemberInterests(Member member, MemberInterestRequest memberInterestRequest) {
-
-        // 관심 유형 저장
-        if (memberInterestRequest.getType() != null) {
-            memberInterestRequest.getType().forEach(type -> {
-                MemberInterest memberInterest = MemberInterest.builder()
-                    .member(member)
-                    .interestCategory(InterestCategory.TYPE)
-                    .interestCode(type)
-                    .build();
-                memberInterestRepository.save(memberInterest);
-            });
-        }
-
-        // 관심 장르 저장
-        if (memberInterestRequest.getGenre() != null) {
-            memberInterestRequest.getGenre().forEach(genre -> {
-                MemberInterest memberInterest = MemberInterest.builder()
-                    .member(member)
-                    .interestCategory(InterestCategory.GENRE)
-                    .interestCode(genre)
-                    .build();
-                memberInterestRepository.save(memberInterest);
-            });
-        }
-    }
 }
